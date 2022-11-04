@@ -1,19 +1,27 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import MainLayout from './layout';
+import AppHeader from './components/layout/AppHeader';
 import Blocks from './pages/Blocks';
 import Main from './pages/Main';
+import { Box } from '@mui/system';
 import Transaction from './pages/Transaction';
+import AppDrawer from './components/layout/AppDrawer';
+import { Toolbar } from '@mui/material';
 const Router = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/*' element={<MainLayout />}>
-          <Route path='' element={<Main />} />
-          <Route path='Blocks' element={<Blocks />} />
-          <Route path='Transaction' element={<Transaction />} />
-        </Route>
-      </Routes>
+      <Box sx={{ display: 'flex' }}>
+        <AppHeader />
+        <AppDrawer drawerWidth={280} />
+        <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
+          <Toolbar />
+          <Routes>
+            <Route path='/' element={<Main />} />
+            <Route path='blocks' element={<Blocks />} />
+            <Route path='transaction' element={<Transaction />} />
+          </Routes>
+        </Box>
+      </Box>
     </BrowserRouter>
   );
 };
