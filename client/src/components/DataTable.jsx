@@ -10,26 +10,33 @@ import TableRow from '@mui/material/TableRow';
 import useToast from '../hooks/useToast';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { IconButton, Tooltip } from '@mui/material';
+import { useNavigate } from 'react-router';
 
-const DataTable = ({ title, rows, columns, countPerPage }) => {
+const DataTable = ({ title, pageId, rows, columns, countPerPage }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(countPerPage ? countPerPage : 10);
   const { setToast } = useToast();
+  const navigate = useNavigate();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
-  const truncate = (input) => `${input.slice(0, 8)}...${input.slice(-7)}`;
+  const truncate = (input) => {
+    if (input.length > 15) {
+      return `${input.slice(0, 8)}...${input.slice(-7)}`;
+    }
+    return input;
+  };
   const copyText = (text) => {
-    setToast('ID가 클립보드에 복사되었습니다.');
+    setToast('클립보드에 복사되었습니다.');
     navigator.clipboard.writeText(text);
   };
+  const moveToDetailPage = (row) => navigate(`/${pageId}/${row.transactionid ? row.transactionid : row.height}`);
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer>
@@ -44,14 +51,14 @@ const DataTable = ({ title, rows, columns, countPerPage }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
               return (
-                <TableRow hover role='checkbox' tabIndex={-1} key={row.code}>
+                <TableRow hover tabIndex={-1} key={index} onClick={() => moveToDetailPage(row)} sx={{ cursor: 'pointer' }}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
                       <TableCell key={column.id} align={column.align}>
-                        {column.id === 'sender' || column.id === 'recipient' ? (
+                        {column.id === 'transactionid' || column.id === 'sender' || column.id === 'recipient' || column.id === 'height' ? (
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             {truncate(value)}
                             <Tooltip title='클립보드에 복사'>

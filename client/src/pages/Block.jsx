@@ -3,16 +3,16 @@ import { Box } from '@mui/system';
 import React from 'react';
 import { useParams } from 'react-router';
 
-const Transaction = () => {
-  const { transactionId } = useParams();
+const Block = () => {
+  const { blockId } = useParams();
   return (
     <Box>
       <Typography variant='h4' sx={{ fontWeight: '500' }}>
-        Transaction details
+        Block details
       </Typography>
-      {transactionId}
+      {blockId}
     </Box>
   );
 };
 
-export default Transaction;
+export default Block;

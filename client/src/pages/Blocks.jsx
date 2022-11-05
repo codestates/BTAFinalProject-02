@@ -59,7 +59,7 @@ const Blocks = () => {
         Blocks
       </Typography>
       <Box sx={{ mt: '12px' }}>
-        <DataTable title='Blocks Table' rows={rows} columns={columns} />
+        <DataTable title='Blocks Table' pageId='block' rows={rows} columns={columns} />
       </Box>
     </Box>
   );

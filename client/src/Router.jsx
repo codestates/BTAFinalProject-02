@@ -4,9 +4,11 @@ import AppHeader from './components/layout/AppHeader';
 import Blocks from './pages/Blocks';
 import Main from './pages/Main';
 import { Box } from '@mui/system';
-import Transaction from './pages/Transaction';
+import Transactions from './pages/Transactions';
 import AppDrawer from './components/layout/AppDrawer';
 import { Toolbar } from '@mui/material';
+import Block from './pages/Block';
+import Transaction from './pages/Transaction';
 const Router = () => {
   return (
     <BrowserRouter>
@@ -18,7 +20,9 @@ const Router = () => {
           <Routes>
             <Route path='/' element={<Main />} />
             <Route path='blocks' element={<Blocks />} />
-            <Route path='transaction' element={<Transaction />} />
+            <Route path='block/:blockId' element={<Block />} />
+            <Route path='transactions' element={<Transactions />} />
+            <Route path='transaction/:transactionId' element={<Transaction />} />
           </Routes>
         </Box>
       </Box>

@@ -21,7 +21,7 @@ const drawerItems = [
     children: [
       // { id: "Network", icon: <HubIcon /> },
       { id: 'Blocks', icon: <CheckBoxOutlineBlankIcon />, route: '/blocks' },
-      { id: 'Transaction', icon: <ImportExportIcon />, route: '/transaction' },
+      { id: 'Transactions', icon: <ImportExportIcon />, route: '/transactions' },
     ],
   },
 ];
