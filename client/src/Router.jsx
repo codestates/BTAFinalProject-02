@@ -13,7 +13,7 @@ const Router = () => {
       <Box sx={{ display: 'flex' }}>
         <AppHeader />
         <AppDrawer drawerWidth={280} />
-        <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
+        <Box component='main' sx={{ flexGrow: 1, p: 3, bgcolor: '#f2f7fb' }}>
           <Toolbar />
           <Routes>
             <Route path='/' element={<Main />} />
