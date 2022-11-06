@@ -2,7 +2,7 @@ import React from "react";
 import DashBoardCard from "./DashBoardCard";
 
 const createCellData = (txid, date, sender, recipient, amount, fee) => {
-  return { txid, date, sender, recipient, amount, fee };
+  return { id: txid, date, sender, recipient, amount, fee };
 };
 
 const rows = [
