@@ -20,7 +20,7 @@ const rows = [
 ];
 
 const LastBlocks = () => {
-  return <DashBoardCard title="Last Blocks" rows={rows} />;
+  return <DashBoardCard title="최근 생성된 블록" rows={rows} />;
 };
 
 export default LastBlocks;

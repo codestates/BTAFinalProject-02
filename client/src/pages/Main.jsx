@@ -24,16 +24,16 @@ const Main = () => {
 
         {/* row 2 */}
         <Grid item xs={12} sm={6} md={4} lg={3}>
-          <DashBoardCard title="Blockheight" text={data.blockheight} />
+          <DashBoardCard title="블록 개수" text={data.blockheight} />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={3}>
-          <DashBoardCard title="Finalized Blockheight" text={data.finalizedBlockheight} />
+          <DashBoardCard title="확정 블록 개수" text={data.finalizedBlockheight} />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={3}>
-          <DashBoardCard title="Total Supply" text={data.txLastOneDay} />
+          <DashBoardCard title="총 공급량" text={data.txLastOneDay} />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={3}>
-          <DashBoardCard title="Transactions In The Last 24h" text={data.txSupply} />
+          <DashBoardCard title="최근 24시간 동안 거래 내역" text={data.txSupply} />
         </Grid>
 
         {/* row 3 */}

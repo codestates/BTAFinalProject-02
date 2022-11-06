@@ -20,7 +20,7 @@ const rows = [
 ];
 
 const LastTransactions = () => {
-  return <DashBoardCard title="Last Transactions" rows={rows} />;
+  return <DashBoardCard title="최근 생성된 트랜잭션" rows={rows} />;
 };
 
 export default LastTransactions;
