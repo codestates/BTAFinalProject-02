@@ -27,7 +27,8 @@ blockSchema.statics.create = function (payload) {
 
 blockSchema.statics.getLastStoredBlockHeight = async function () {
     const block = await this.findOne({}).sort({"height": -1});
-    return block.height
+
+    return block ? block.height : 0
 };
 
 module.exports = mongoose.model('Block', blockSchema);

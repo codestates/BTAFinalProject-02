@@ -12,9 +12,6 @@ mongoose
             const decodedBlock = await decodeBlock(data.block)
             const blockData = reStructBlockData(decodedBlock)
             Block.create(blockData)
-            // console.log(data.accounts.map(async (account) => {
-            //     console.log(await decodeAccount(account))
-            // }))
         })
         const lastStoredBlockHeight = await Block.getLastStoredBlockHeight()
         const {lastBlockHeight} = await getLastBlock()
