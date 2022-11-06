@@ -14,7 +14,6 @@ const blockSchema = new mongoose.Schema({
         maxHeightPrevoted: {type: Number, required: true},
         seedReveal: {type: String, required: true},
         payload: {type: [], required: true},
-        accounts: {type: [], required: true}
     },
     {
         timestamps: true

@@ -10,7 +10,7 @@ mongoose
     .then(async () => {
         subscribeBlocks(async (data) => {
             const decodedBlock = await decodeBlock(data.block)
-            const blockData = reStructBlockData(decodedBlock, data)
+            const blockData = reStructBlockData(decodedBlock)
             Block.create(blockData)
             // console.log(data.accounts.map(async (account) => {
             //     console.log(await decodeAccount(account))
@@ -20,7 +20,7 @@ mongoose
         const {lastBlockHeight} = await getLastBlock()
         for (let i = lastStoredBlockHeight + 1; i < lastBlockHeight; i++) {
             getBlockByHeight(i).then((block) => {
-                Block.create(reStructBlockData(block, {accounts: []}))
+                Block.create(reStructBlockData(block))
             })
         }
     })
@@ -28,13 +28,12 @@ mongoose
 getLastBlock().then(console.log)
 
 
-function reStructBlockData(decodedBlock, data) {
+function reStructBlockData(decodedBlock) {
     let blockData = {}
     Object.assign(blockData, decodedBlock.header)
     Object.assign(blockData, decodedBlock.header.asset)
     delete blockData.asset
     blockData.payload = decodedBlock.payload
-    blockData.accounts = data.accounts
     blockData.previousBlockID = blockData.previousBlockID.toString("hex")
     blockData.transactionRoot = blockData.transactionRoot.toString("hex")
     blockData.generatorPublicKey = blockData.generatorPublicKey.toString("hex")
