@@ -32,5 +32,8 @@ blockSchema.statics.findBlockByHeight = function (height) {
     return this.findOne({height: {$eq: height}});
 }
 
+blockSchema.statics.getCount = function(){
+    return this.count({});
+}
 
 module.exports = mongoose.model('Block', blockSchema);

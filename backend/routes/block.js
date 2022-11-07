@@ -5,7 +5,9 @@ const Block = require('../models/block')
 router.get('/:page?', (req, res) => {
     const page = req.params["page"] || 0;
     Block.getList(page).then(list => {
-        res.send(list)
+        Block.getCount().then(count => {
+            res.send({blocks: list, count})
+        })
     })
 })
 

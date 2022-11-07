@@ -22,4 +22,8 @@ transactionSchema.statics.getList = function (page) {
 transactionSchema.statics.findTransaction = function (id) {
     return this.findOne({id: {$eq: id}});
 }
+
+transactionSchema.statics.getCount = function(){
+    return this.count({});
+}
 module.exports = mongoose.model('Transaction', transactionSchema);

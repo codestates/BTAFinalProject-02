@@ -5,7 +5,9 @@ const Transaction = require('../models/transaction')
 router.get('/:page?', (req, res) => {
     const page = req.params["page"] || 0;
     Transaction.getList(page).then(list => {
-        res.send(list)
+        Transaction.getCount().then(count => {
+            res.send({transactions: list, count})
+        })
     })
 })
 
