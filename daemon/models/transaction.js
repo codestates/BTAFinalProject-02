@@ -6,6 +6,7 @@ const transactionSchema = new mongoose.Schema({
     nonce: {type: String, required: true},
     fee: {type: String, required: true},
     senderPublicKey: {type: String, required: true},
+    senderAddress: {type: String, required: true},
     amount: {type: String, required: true},
     recipientAddress: {type: String, required: true},
     data: {type: String, required: true},

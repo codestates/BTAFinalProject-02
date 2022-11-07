@@ -3,6 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const {MONGO_URI, RPC_URI} = process.env;
 const {Block, Transaction} = require('./models')
+const {cryptography} = require('@liskhq/lisk-client')
 
 
 mongoose
@@ -37,6 +38,7 @@ function reStructBlockData(decodedBlock) {
     delete blockData.asset
     blockData.previousBlockID = blockData.previousBlockID.toString("hex")
     blockData.transactionRoot = blockData.transactionRoot.toString("hex")
+    blockData.generatorAddress = cryptography.getAddressFromPublicKey(blockData.generatorPublicKey).toString("hex")
     blockData.generatorPublicKey = blockData.generatorPublicKey.toString("hex")
     blockData.signature = blockData.signature.toString("hex")
     blockData.id = blockData.id.toString("hex")
@@ -53,6 +55,7 @@ function reStructTransactionData(transaction, block) {
     Object.assign(transactionData, transaction)
     Object.assign(transactionData, transaction.asset)
     delete transactionData.asset
+    transactionData.senderAddress = cryptography.getAddressFromPublicKey(transactionData.senderPublicKey).toString("hex")
     transactionData.senderPublicKey = transactionData.senderPublicKey.toString("hex")
     transactionData.recipientAddress = transactionData.recipientAddress.toString("hex")
     transactionData.id = transactionData.id.toString("hex")

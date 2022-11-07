@@ -7,6 +7,7 @@ const blockSchema = new mongoose.Schema({
         previousBlockID: {type: String, required: true},
         transactionRoot: {type: String, required: true},
         generatorPublicKey: {type: String, required: true},
+        generatorAddress: {type: String, required: true},
         reward: {type: String, required: true},
         signature: {type: String, required: true},
         id: {type: String, required: true, unique: true},
