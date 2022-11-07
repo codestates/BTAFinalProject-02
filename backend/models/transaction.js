@@ -23,7 +23,15 @@ transactionSchema.statics.findTransaction = function (id) {
     return this.findOne({id: {$eq: id}});
 }
 
-transactionSchema.statics.getCount = function(){
+transactionSchema.statics.getCount = function () {
     return this.count({});
+}
+
+transactionSchema.statics.findByAddress = function (address, page) {
+    return this.find({address: {$eq: address}}).sort({height: -1}).skip(20 * page).limit(20);
+}
+
+transactionSchema.statics.getCountByAddress = function (address) {
+    return this.count({address: {$eq: address}});
 }
 module.exports = mongoose.model('Transaction', transactionSchema);

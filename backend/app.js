@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const transactionRouter = require("./routes/transaction");
 const blockRouter = require('./routes/block')
+const accountRouter = require('./routes/account')
 const app = express();
 
 const {PORT, MONGO_URI} = process.env;
@@ -20,5 +21,6 @@ mongoose
 
 app.use("/transactions", transactionRouter);
 app.use("/blocks", blockRouter);
+app.use("/accounts", accountRouter);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
