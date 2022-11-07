@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const transactionRouter = require("./routes/transaction");
+const blockRouter = require('./routes/block')
 const app = express();
 
 const {PORT, MONGO_URI} = process.env;
@@ -18,5 +19,6 @@ mongoose
     .catch(e => console.error(e));
 
 app.use("/transactions", transactionRouter);
+app.use("/blocks", blockRouter);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const blockSchema = new mongoose.Schema({
         version: {type: Number, required: true},
         timestamp: {type: Number, required: true},
-        height: {type: Number, required: true, index:true},
+        height: {type: Number, required: true, index: true},
         previousBlockID: {type: String, required: true},
         transactionRoot: {type: String, required: true},
         generatorPublicKey: {type: String, required: true},
@@ -19,5 +19,18 @@ const blockSchema = new mongoose.Schema({
         timestamps: true
     }
 )
+
+blockSchema.statics.getList = function (page) {
+    return this.find({}).sort({height: -1}).skip(20 * page).limit(20);
+}
+
+blockSchema.statics.findBlockByID = function (id) {
+    return this.findOne({id: {$eq: id}});
+}
+
+blockSchema.statics.findBlockByHeight = function (height) {
+    return this.findOne({height: {$eq: height}});
+}
+
 
 module.exports = mongoose.model('Block', blockSchema);
