@@ -35,7 +35,7 @@ const DataTable = ({ title, pageId, rows, columns, countPerPage }) => {
     setToast('클립보드에 복사되었습니다.');
     navigator.clipboard.writeText(text);
   };
-  const moveToDetailPage = (row) => navigate(`/${pageId}/${row.transactionid ? row.transactionid : row.height}`);
+  const moveToDetailPage = (row) => navigate(`/${pageId}/${row.transactionid ? row.transactionid : row.blockid}`);
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -58,7 +58,7 @@ const DataTable = ({ title, pageId, rows, columns, countPerPage }) => {
                     const value = row[column.id];
                     return (
                       <TableCell key={column.id} align={column.align}>
-                        {column.id === 'transactionid' || column.id === 'sender' || column.id === 'recipient' || column.id === 'height' ? (
+                        {column.id === 'blockid' || column.id === 'transactionid' || column.id === 'sender' || column.id === 'recipient' || column.id === 'height' ? (
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             {truncate(value)}
                             <Tooltip title='클립보드에 복사'>
