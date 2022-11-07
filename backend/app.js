@@ -4,10 +4,42 @@ const mongoose = require('mongoose');
 const transactionRouter = require("./routes/transaction");
 const blockRouter = require('./routes/block')
 const accountRouter = require('./routes/account')
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
 const app = express();
+
 
 const {PORT, MONGO_URI} = process.env;
 
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "Express API with Swagger",
+            version: "0.1.0",
+            description:
+                "",
+        },
+        servers: [
+            {
+                url: "http://34.125.144.144:9000:4500",
+            },
+        ],
+    },
+    apis: [
+        "./routes/account.js",
+        "./routes/block.js",
+        "./routes/transaction.js"
+    ],
+};
+
+const specs = swaggerJsdoc(options);
+
+app.use("/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(specs)
+);
 app.use(express.json());
 
 mongoose.Promise = global.Promise;

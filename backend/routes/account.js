@@ -1,3 +1,9 @@
+/*
+* @swagger
+* tags:
+*   name: Accounts
+*   description: account 조회
+ */
 const router = require('express').Router()
 const Block = require('../models/block')
 const Transaction = require('../models/transaction')
@@ -8,7 +14,24 @@ const {NODE_RPC_URI} = process.env;
 apiClient.createWSClient(NODE_RPC_URI).then(client => {
     clientCache = client;
 });
-
+/**
+ * @swagger
+ * paths:
+ *  /accounts/{address}:
+ *   get:
+ *     tags: [Account]
+ *     summary: account 조회
+ *     parameters:
+ *      - in: path
+ *        name: address
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: publicKey or binaryAddress or address
+ *     responses:
+ *       "200":
+ *         description: account 정보
+ */
 router.get("/:address", (req, res) => {
     const address = req.params['address'];
     let binaryAddress = address;
@@ -24,6 +47,30 @@ router.get("/:address", (req, res) => {
     })
 })
 
+/**
+ * @swagger
+ * paths:
+ *  /accounts/{address}/transactions/{page}:
+ *   get:
+ *     tags: [Account]
+ *     summary: account별 transaction 조회
+ *     parameters:
+ *      - in: path
+ *        name: address
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: publicKey 또는 binaryAddress 또는 address
+ *      - in: path
+ *        name: page
+ *        schema:
+ *          type: integer
+ *        required: false
+ *        description: 페이지
+ *     responses:
+ *       "200":
+ *         description: transaction 내역
+ */
 router.get("/:address/transactions/:page?", (req, res) => {
     let address = req.params['address'];
     let binaryAddress = address;
