@@ -6,7 +6,7 @@ const blockRouter = require('./routes/block')
 const accountRouter = require('./routes/account')
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-
+const cors = require('cors');
 const app = express();
 
 
@@ -23,7 +23,7 @@ const options = {
         },
         servers: [
             {
-                url: "http://34.125.144.144:9000:4500",
+                url: "http://34.125.144.144:4500",
             },
         ],
     },
@@ -41,7 +41,7 @@ app.use("/api-docs",
     swaggerUi.setup(specs)
 );
 app.use(express.json());
-
+app.use(cors())
 mongoose.Promise = global.Promise;
 
 
