@@ -1,7 +1,9 @@
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+import { useQuery } from 'react-query';
 import DataTable from '../components/DataTable';
+import { getTransactionList } from '../hooks/useAxios';
 
 const columns = [
   { id: 'transactionid', label: 'Transaction ID', width: 180 },
@@ -58,6 +60,8 @@ const rows = [
 ];
 
 const Transactions = () => {
+  const { data, isLoading } = useQuery(['transaction-list', 1], () => getTransactionList(1));
+  console.log(data);
   return (
     <Box>
       <Typography variant='h4' sx={{ fontWeight: '500', letterSpacing: '1px' }}>

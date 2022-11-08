@@ -5,7 +5,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import useToast from '../hooks/useToast';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -13,18 +12,9 @@ import { IconButton, Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router';
 
 const DataTable = ({ title, pageId, rows, columns, countPerPage }) => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(countPerPage ? countPerPage : 10);
   const { setToast } = useToast();
   const navigate = useNavigate();
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
   const truncate = (input) => {
     if (input.length > 15) return `${input.slice(0, 8)}...${input.slice(-7)}`;
     return input;
@@ -50,14 +40,14 @@ const DataTable = ({ title, pageId, rows, columns, countPerPage }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+            {rows.map((row, index) => {
               return (
                 <TableRow hover tabIndex={-1} key={index} onClick={() => moveToDetailPage(row)} sx={{ cursor: 'pointer' }}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
                       <TableCell key={column.id} align={column.align}>
-                        {column.id === 'blockid' || column.id === 'transactionid' || column.id === 'sender' || column.id === 'recipient' || column.id === 'height' ? (
+                        {column.id === 'blockid' || column.id === 'previousBlockId' || column.id === 'transactionid' || column.id === 'sender' || column.id === 'recipient' || column.id === 'height' ? (
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             {truncate(value)}
                             <Tooltip title='클립보드에 복사'>
@@ -80,7 +70,6 @@ const DataTable = ({ title, pageId, rows, columns, countPerPage }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination rowsPerPageOptions={[10, 25, 50, 100]} component='div' count={rows.length} rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} />
     </Paper>
   );
 };
