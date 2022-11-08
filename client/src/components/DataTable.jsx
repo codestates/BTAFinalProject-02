@@ -26,12 +26,11 @@ const DataTable = ({ title, pageId, rows, columns, countPerPage }) => {
     setPage(0);
   };
   const truncate = (input) => {
-    if (input.length > 15) {
-      return `${input.slice(0, 8)}...${input.slice(-7)}`;
-    }
+    if (input.length > 15) return `${input.slice(0, 8)}...${input.slice(-7)}`;
     return input;
   };
-  const copyText = (text) => {
+  const copyText = (e, text) => {
+    e.stopPropagation();
     setToast('클립보드에 복사되었습니다.');
     navigator.clipboard.writeText(text);
   };
@@ -62,7 +61,7 @@ const DataTable = ({ title, pageId, rows, columns, countPerPage }) => {
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             {truncate(value)}
                             <Tooltip title='클립보드에 복사'>
-                              <IconButton size='small' aria-label='copy text' onClick={() => copyText(value)} sx={{ ml: '4px' }}>
+                              <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, value)} sx={{ ml: '4px' }}>
                                 <ContentCopyIcon style={{ fontSize: '14px' }} />
                               </IconButton>
                             </Tooltip>
