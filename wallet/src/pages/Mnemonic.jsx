@@ -13,7 +13,7 @@ const Mnemonic = () => {
 
   const handleClickShowMnemonic = () => {
     if (mnemonic === "") {
-      setMnemonic("mnemonicCode");
+      setMnemonic("mnemonic");
     }
     setShowSummitBtn(false);
     setShowMnemonic(!showMnemonic);
@@ -25,12 +25,12 @@ const Mnemonic = () => {
 
   return (
     <>
+      <div style={{ paddingTop: "30px" }}>
+        <Link component={Main}>
+          <ArrowBackIcon style={{ width: "16px", marginLeft: "30px" }} />
+        </Link>
+      </div>
       <div style={{ textAlign: "center" }}>
-        <div style={{ paddingTop: "50px" }}>
-          <Link component={Main}>
-            <ArrowBackIcon style={{ width: "30px" }} />
-          </Link>
-        </div>
         <div style={{ paddingTop: "28px" }}>
           <h1>니모닉 구문 확인</h1>
           <div style={{ fontSize: "14px" }}>

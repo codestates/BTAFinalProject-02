@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { goTo } from "react-chrome-extension-router";
-import { Button, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useInput } from "../hooks/useInput";
@@ -46,8 +52,7 @@ const CreatePassword = () => {
   return (
     <>
       <div style={{ textAlign: "center" }}>
-        <div style={{ paddingTop: "50px" }}></div>
-        <div style={{ paddingTop: "28px" }}>
+        <div style={{ paddingTop: "90px" }}>
           <h1>비밀번호 생성하기</h1>
           <FormControl
             sx={{ m: 1, width: "35ch", margin: "10px" }}

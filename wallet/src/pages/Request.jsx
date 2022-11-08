@@ -14,9 +14,11 @@ const Request = () => {
           <ArrowBackIcon style={{ width: "16px", marginLeft: "30px" }} />
         </Link>
       </div>
-      <div style={{ textAlign: "center", paddingTop: "80px" }}>
+      <div style={{ textAlign: "center", paddingTop: "30px" }}>
         <img width="80px" height="80px" src="lisk.png" alt="lsk" />
-        <h2 style={{ paddingBottom: "20px" }}>LISK 지갑 생성이 처음이신가요?</h2>
+        <h2 style={{ paddingBottom: "20px" }}>
+          LISK 지갑 생성이 처음이신가요?
+        </h2>
         <h4>아니요. 이미 비밀 복구 구문이 있습니다</h4>
         <Link component={CheckMnemonic} style={{ textDecoration: "none" }}>
           <Button variant="contained">지갑 가져오기</Button>
