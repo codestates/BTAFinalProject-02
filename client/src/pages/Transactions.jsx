@@ -60,7 +60,7 @@ const rows = [
 ];
 
 const Transactions = () => {
-  const { data, isLoading } = useQuery(['transaction-list', 1], () => getTransactionList(1));
+  const { data, isLoading } = useQuery(['transaction-list', 0], () => getTransactionList(0));
   console.log(data);
   return (
     <Box>

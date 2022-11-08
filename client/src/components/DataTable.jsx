@@ -11,7 +11,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { IconButton, Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router';
 
-const DataTable = ({ title, pageId, rows, columns, countPerPage }) => {
+const DataTable = ({ title, pageId, rows, columns }) => {
   const { setToast } = useToast();
   const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ const DataTable = ({ title, pageId, rows, columns, countPerPage }) => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer>
-        <Table stickyHeader aria-label={title}>
+        <Table stickyHeader size='small' aria-label={title}>
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -46,7 +46,7 @@ const DataTable = ({ title, pageId, rows, columns, countPerPage }) => {
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
-                      <TableCell key={column.id} align={column.align}>
+                      <TableCell key={column.id} align={column.align} sx={{ py: 1 }}>
                         {column.id === 'blockid' || column.id === 'previousBlockId' || column.id === 'transactionid' || column.id === 'sender' || column.id === 'recipient' || column.id === 'height' ? (
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             {truncate(value)}

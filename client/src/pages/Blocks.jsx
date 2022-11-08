@@ -1,32 +1,53 @@
-import { Typography } from '@mui/material';
+import { Pagination, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import { useSearchParams } from 'react-router-dom';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import DataTable from '../components/DataTable';
 import { getBlockList } from '../hooks/useAxios';
+import { BeddowsToLSK, timestampToDate } from '../utils/conversion-utils';
 
 const columns = [
-  { id: 'blockid', label: 'Block ID', minWidth: 170 },
   { id: 'height', label: 'Height', minWidth: 170 },
+  { id: 'blockid', label: 'Block ID', minWidth: 170 },
   { id: 'previousBlockId', label: 'Previous Block ID', minWidth: 170 },
-  { id: 'updatedAt', label: 'Updated At', minWidth: 170 },
+  { id: 'date', label: 'Updated At', minWidth: 170 },
+  { id: 'transactionCount', label: 'Transactions', minWidth: 170 },
   { id: 'reward', label: 'Reward', minWidth: 170 },
 ];
 
-const createCellData = (blockid, height, previousBlockId, updatedAt, reward) => {
-  return { blockid, height, previousBlockId, updatedAt, reward };
+const createCellData = (height, blockid, previousBlockId, timestamp, transactionCount, tempReward) => {
+  const date = timestampToDate(new Date(timestamp));
+  const reward = `${BeddowsToLSK(tempReward)} LSK`;
+  return { height, blockid, previousBlockId, date, transactionCount, reward };
 };
+
 const Blocks = () => {
-  const { data, isLoading } = useQuery(['block-list', 1], () => getBlockList(1));
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [page, setPage] = useState(1);
   const [rows, setRows] = useState([]);
+  const [pageCount, setPageCount] = useState(1);
+  const { data, isLoading, refetch } = useQuery(['block-list', Number(page)], () => getBlockList(Number(page)));
+  console.log(data);
   useEffect(() => {
     const blockList = [];
     data?.data.blocks.forEach((block) => {
-      blockList.push(createCellData(block.id, block.height, block.previousBlockID, block.updatedAt, block.reward));
+      blockList.push(createCellData(block.height, block.id, block.previousBlockID, block.timestamp, block.payload.length, block.reward));
     });
+    setPageCount(Math.ceil(data?.data.count / 20));
     setRows(blockList);
   }, [data]);
+  useEffect(() => {
+    if (!searchParams.get('page')) {
+      setSearchParams({ page: 1 });
+    }
+    setPage(Number(searchParams.get('page')));
+    refetch();
+  }, [searchParams, page]);
+  const handlePaginationChange = (e, value) => {
+    setSearchParams({ page: value });
+  };
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -37,6 +58,9 @@ const Blocks = () => {
       </Typography>
       <Box sx={{ mt: '12px' }}>
         <DataTable title='Blocks Table' pageId='block' rows={rows} columns={columns} />
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <Pagination count={pageCount} page={page} onChange={handlePaginationChange} showFirstButton showLastButton variant='outlined' shape='rounded' color='primary' />
+        </Box>
       </Box>
     </Box>
   );
