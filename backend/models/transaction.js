@@ -28,7 +28,7 @@ transactionSchema.statics.getCount = function () {
 }
 
 transactionSchema.statics.findByAddress = function (address, page) {
-    return this.find({address: {$eq: address}}).sort({height: -1}).skip(20 * page).limit(20);
+    return this.find({address: {$eq: address}}).sort({height: -1}).skip(20 * (page - 1)).limit(20);
 }
 
 transactionSchema.statics.getCountByAddress = function (address) {

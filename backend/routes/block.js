@@ -20,7 +20,7 @@ const Block = require('../models/block')
  *         description: block 리스트(페이지당 20개)
  */
 router.get('/:page?', (req, res) => {
-    const page = req.params["page"] || 0;
+    const page = req.params["page"] || 1;
     Block.getList(page).then(list => {
         Block.getCount().then(count => {
             res.send({blocks: list, count})

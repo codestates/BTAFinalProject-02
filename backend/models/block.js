@@ -21,7 +21,7 @@ const blockSchema = new mongoose.Schema({
 )
 
 blockSchema.statics.getList = function (page) {
-    return this.find({}).sort({height: -1}).skip(20 * page).limit(20);
+    return this.find({}).sort({height: -1}).skip(20 * (page - 1)).limit(20);
 }
 
 blockSchema.statics.findBlockByID = function (id) {
@@ -32,7 +32,7 @@ blockSchema.statics.findBlockByHeight = function (height) {
     return this.findOne({height: {$eq: height}});
 }
 
-blockSchema.statics.getCount = function(){
+blockSchema.statics.getCount = function () {
     return this.count({});
 }
 

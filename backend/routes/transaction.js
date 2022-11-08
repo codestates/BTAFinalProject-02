@@ -20,7 +20,7 @@ const Transaction = require('../models/transaction')
  *         description: transaction 리스트(페이지당 20개)
  */
 router.get('/:page?', (req, res) => {
-    const page = req.params["page"] || 0;
+    const page = req.params["page"] || 1;
     Transaction.getList(page).then(list => {
         Transaction.getCount().then(count => {
             res.send({transactions: list, count})
