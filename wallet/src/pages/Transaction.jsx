@@ -51,11 +51,7 @@ const Transaction = () => {
             shrink: true,
           }}
           style={{ margin: "10px auto", width: "280px" }}
-          helperText={
-            <h5 style={{ margin: 0 }}>
-              나의 잔액 : 0 LSK
-            </h5>
-          }
+          helperText={<h5 style={{ margin: 0 }}>나의 잔액 : 0 LSK</h5>}
         />
         <div style={{ paddingTop: "10px" }}>
           <Button variant="contained" onClick={onClickSubmit}>
