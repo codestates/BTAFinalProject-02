@@ -1,67 +1,57 @@
-import { Typography } from '@mui/material';
+import { Pagination, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import { useSearchParams } from 'react-router-dom';
 import DataTable from '../components/DataTable';
 import { getTransactionList } from '../hooks/useAxios';
+import { BeddowsToLSK, timestampToDate } from '../utils/conversion-utils';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const columns = [
   { id: 'transactionid', label: 'Transaction ID', width: 180 },
+  { id: 'date', label: 'Date', minWidth: 100 },
   { id: 'sender', label: 'Sender', width: 180 },
   { id: 'recipient', label: 'Recipient', width: 180 },
-  { id: 'date', label: 'Date', minWidth: 100 },
+  { id: 'blockid', label: 'Block ID', width: 180 },
   { id: 'amount', label: 'Amount', minWidth: 100 },
   { id: 'fee', label: 'Fee', minWidth: 100 },
-  { id: 'status', label: 'Status', minWidth: 100 },
 ];
 
-const createCellData = (transactionid, sender, recipient, date, amount, fee, status) => {
-  return { transactionid, sender, recipient, date, amount, fee, status };
+const createCellData = (transactionid, date, sender, recipient, blockid, tempAmount, tempFee) => {
+  const amount = `${BeddowsToLSK(tempAmount)} LSK`;
+  const fee = `${BeddowsToLSK(tempFee)} LSK`;
+  return { transactionid, date, sender, recipient, blockid, amount, fee };
 };
 
-const rows = [
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-  createCellData('af84f7677c83fb88d67e02bd0fbfaa66e66187ee81fd4b213cb3c73af8458992', 'e729d099966ca7efd78628938aca5f848119a6e42a2bc0776a915d25227fb4f6', 'lskv7bssowcksr5d39y2av5tmt2phpzkkh82xvr6f', '5/11/2022 - 08:00:10', '2.84878587 LSK', '0.0025 LSK', 'suceess'),
-];
-
 const Transactions = () => {
-  const { data, isLoading } = useQuery(['transaction-list', 0], () => getTransactionList(0));
-  console.log(data);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [page, setPage] = useState(1);
+  const [rows, setRows] = useState([]);
+  const [pageCount, setPageCount] = useState(1);
+  const { data, isLoading, refetch } = useQuery(['transaction-list', 0], () => getTransactionList(0));
+  useEffect(() => {
+    const transactionList = [];
+    data?.data.transactions.forEach((transaction) => {
+      transactionList.push(createCellData(transaction.id, '', transaction.senderAddress, transaction.recipientAddress, transaction.blockID, transaction.amount, transaction.fee));
+    });
+    setPageCount(data?.data.count ? Math.ceil(data?.data.count / 20) : 1);
+    setRows(transactionList);
+  }, [data]);
+  useEffect(() => {
+    if (!searchParams.get('page')) {
+      setSearchParams({ page: 1 });
+    }
+    setPage(Number(searchParams.get('page')));
+    refetch();
+  }, [searchParams, page]);
+  const handlePaginationChange = (e, value) => {
+    setSearchParams({ page: value });
+  };
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <Box>
       <Typography variant='h4' sx={{ fontWeight: '500', letterSpacing: '1px' }}>
@@ -69,6 +59,9 @@ const Transactions = () => {
       </Typography>
       <Box sx={{ mt: '12px' }}>
         <DataTable title='Transactions Table' pageId='transaction' rows={rows} columns={columns} />
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, mb: 2 }}>
+          <Pagination count={pageCount} page={page} onChange={handlePaginationChange} showFirstButton showLastButton variant='outlined' shape='rounded' color='primary' />
+        </Box>
       </Box>
     </Box>
   );

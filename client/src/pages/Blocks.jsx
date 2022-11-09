@@ -29,13 +29,12 @@ const Blocks = () => {
   const [rows, setRows] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const { data, isLoading, refetch } = useQuery(['block-list', Number(page)], () => getBlockList(Number(page)));
-  console.log(data);
   useEffect(() => {
     const blockList = [];
     data?.data.blocks.forEach((block) => {
       blockList.push(createCellData(block.height, block.id, block.previousBlockID, block.timestamp, block.payload.length, block.reward));
     });
-    setPageCount(Math.ceil(data?.data.count / 20));
+    setPageCount(data?.data.count ? Math.ceil(data?.data.count / 20) : 1);
     setRows(blockList);
   }, [data]);
   useEffect(() => {
@@ -58,7 +57,7 @@ const Blocks = () => {
       </Typography>
       <Box sx={{ mt: '12px' }}>
         <DataTable title='Blocks Table' pageId='block' rows={rows} columns={columns} />
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, mb: 2 }}>
           <Pagination count={pageCount} page={page} onChange={handlePaginationChange} showFirstButton showLastButton variant='outlined' shape='rounded' color='primary' />
         </Box>
       </Box>

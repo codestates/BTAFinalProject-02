@@ -3,11 +3,19 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Box } from '@mui/system';
 import React from 'react';
 import { useParams } from 'react-router';
+import { useQuery } from 'react-query';
+import { getBlockByHeight, getBlockById } from '../hooks/useAxios';
 import useToast from '../hooks/useToast';
 
 const Block = () => {
-  const { blockId } = useParams();
+  const { id } = useParams();
   const { setToast } = useToast();
+
+  const { data, isLoading } = useQuery(['block', id], () => {
+    return id.length <= 8 ? getBlockByHeight(Number(id)) : getBlockById(Number(id));
+  });
+  console.log(data);
+
   const truncate = (input) => {
     if (input.length > 15) return `${input.slice(0, 8)}...${input.slice(-7)}`;
     return input;
@@ -27,9 +35,9 @@ const Block = () => {
           <Box sx={{ minWidth: '170px' }}>
             <Typography variant='subtitle2'>Block ID</Typography>
             <p style={{ display: 'flex', alignItems: 'center' }}>
-              {truncate(blockId)}
+              {truncate(id)}
               <Tooltip title='클립보드에 복사'>
-                <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, blockId)} sx={{ ml: '4px' }}>
+                <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, id)} sx={{ ml: '4px' }}>
                   <ContentCopyIcon style={{ fontSize: '14px' }} />
                 </IconButton>
               </Tooltip>

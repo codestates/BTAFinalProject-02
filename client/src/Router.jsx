@@ -20,9 +20,9 @@ const Router = () => {
           <Routes>
             <Route path='/' element={<Main />} />
             <Route path='blocks' element={<Blocks />} />
-            <Route path='block/:blockId' element={<Block />} />
+            <Route path='block/:id' element={<Block />} />
             <Route path='transactions' element={<Transactions />} />
-            <Route path='transaction/:transactionId' element={<Transaction />} />
+            <Route path='transaction/:id' element={<Transaction />} />
           </Routes>
         </Box>
       </Box>

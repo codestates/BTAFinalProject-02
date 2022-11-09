@@ -6,7 +6,7 @@ import { useParams } from 'react-router';
 import useToast from '../hooks/useToast';
 
 const Transaction = () => {
-  const { transactionId } = useParams();
+  const { id } = useParams();
   const { setToast } = useToast();
   const truncate = (input) => {
     if (input.length > 15) return `${input.slice(0, 8)}...${input.slice(-7)}`;
@@ -26,9 +26,9 @@ const Transaction = () => {
         <Box>
           <Typography variant='subtitle2'>Transaction ID</Typography>
           <p style={{ display: 'flex', alignItems: 'center' }}>
-            {transactionId}
+            {id}
             <Tooltip title='클립보드에 복사'>
-              <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, transactionId)} sx={{ ml: '4px' }}>
+              <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, id)} sx={{ ml: '4px' }}>
                 <ContentCopyIcon style={{ fontSize: '14px' }} />
               </IconButton>
             </Tooltip>

@@ -8,8 +8,17 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import useToast from '../hooks/useToast';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { IconButton, Tooltip } from '@mui/material';
+import { Box, IconButton, Link, Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router';
+
+const linkList = {
+  blockid: 'block',
+  previousBlockId: 'block',
+  transactionid: 'transaction',
+  height: 'block',
+  sender: 'account',
+  recipient: 'account',
+};
 
 const DataTable = ({ title, pageId, rows, columns }) => {
   const { setToast } = useToast();
@@ -24,8 +33,6 @@ const DataTable = ({ title, pageId, rows, columns }) => {
     setToast('클립보드에 복사되었습니다.');
     navigator.clipboard.writeText(text);
   };
-  const moveToDetailPage = (row) => navigate(`/${pageId}/${row.transactionid ? row.transactionid : row.blockid}`);
-
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer>
@@ -42,20 +49,22 @@ const DataTable = ({ title, pageId, rows, columns }) => {
           <TableBody>
             {rows.map((row, index) => {
               return (
-                <TableRow hover tabIndex={-1} key={index} onClick={() => moveToDetailPage(row)} sx={{ cursor: 'pointer' }}>
+                <TableRow hover tabIndex={-1} key={index}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
                       <TableCell key={column.id} align={column.align} sx={{ py: 1 }}>
-                        {column.id === 'blockid' || column.id === 'previousBlockId' || column.id === 'transactionid' || column.id === 'sender' || column.id === 'recipient' || column.id === 'height' ? (
-                          <div style={{ display: 'flex', alignItems: 'center' }}>
-                            {truncate(value)}
-                            <Tooltip title='클립보드에 복사'>
-                              <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, value)} sx={{ ml: '4px' }}>
-                                <ContentCopyIcon style={{ fontSize: '14px' }} />
-                              </IconButton>
-                            </Tooltip>
-                          </div>
+                        {linkList[column.id] ? (
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Link href={`/${linkList[column.id]}/${value}`} underline='hover'>
+                              {truncate(value)}
+                              <Tooltip title='클립보드에 복사'>
+                                <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, value)} sx={{ ml: '4px' }}>
+                                  <ContentCopyIcon style={{ fontSize: '14px' }} />
+                                </IconButton>
+                              </Tooltip>
+                            </Link>
+                          </Box>
                         ) : column.format && typeof value === 'number' ? (
                           column.format(value)
                         ) : (
