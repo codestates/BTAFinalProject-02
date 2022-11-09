@@ -9,7 +9,6 @@ import TableRow from '@mui/material/TableRow';
 import useToast from '../hooks/useToast';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Box, IconButton, Link, Tooltip } from '@mui/material';
-import { useNavigate } from 'react-router';
 
 const linkList = {
   blockid: 'block',
@@ -20,9 +19,8 @@ const linkList = {
   recipient: 'account',
 };
 
-const DataTable = ({ title, pageId, rows, columns }) => {
+const DataTable = ({ title, rows, columns }) => {
   const { setToast } = useToast();
-  const navigate = useNavigate();
 
   const truncate = (input) => {
     if (input.length > 15) return `${input.slice(0, 8)}...${input.slice(-7)}`;
@@ -33,6 +31,7 @@ const DataTable = ({ title, pageId, rows, columns }) => {
     setToast('클립보드에 복사되었습니다.');
     navigator.clipboard.writeText(text);
   };
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer>
@@ -58,12 +57,12 @@ const DataTable = ({ title, pageId, rows, columns }) => {
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Link href={`/${linkList[column.id]}/${value}`} underline='hover'>
                               {truncate(value)}
-                              <Tooltip title='클립보드에 복사'>
-                                <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, value)} sx={{ ml: '4px' }}>
-                                  <ContentCopyIcon style={{ fontSize: '14px' }} />
-                                </IconButton>
-                              </Tooltip>
                             </Link>
+                            <Tooltip title='클립보드에 복사'>
+                              <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, value)} sx={{ ml: '4px' }}>
+                                <ContentCopyIcon style={{ fontSize: '14px' }} />
+                              </IconButton>
+                            </Tooltip>
                           </Box>
                         ) : column.format && typeof value === 'number' ? (
                           column.format(value)

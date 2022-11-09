@@ -56,7 +56,7 @@ const Blocks = () => {
         Blocks
       </Typography>
       <Box sx={{ mt: '12px' }}>
-        <DataTable title='Blocks Table' pageId='block' rows={rows} columns={columns} />
+        <DataTable title='Blocks Table' rows={rows} columns={columns} />
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, mb: 2 }}>
           <Pagination count={pageCount} page={page} onChange={handlePaginationChange} showFirstButton showLastButton variant='outlined' shape='rounded' color='primary' />
         </Box>

@@ -9,11 +9,11 @@ import { BeddowsToLSK, timestampToDate } from '../utils/conversion-utils';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const columns = [
-  { id: 'transactionid', label: 'Transaction ID', width: 180 },
+  { id: 'transactionid', label: 'Transaction ID', minWidth: 180 },
   { id: 'date', label: 'Date', minWidth: 100 },
-  { id: 'sender', label: 'Sender', width: 180 },
-  { id: 'recipient', label: 'Recipient', width: 180 },
-  { id: 'blockid', label: 'Block ID', width: 180 },
+  { id: 'sender', label: 'Sender', minWidth: 180 },
+  { id: 'recipient', label: 'Recipient', minWidth: 180 },
+  { id: 'blockid', label: 'Block ID', minWidth: 180 },
   { id: 'amount', label: 'Amount', minWidth: 100 },
   { id: 'fee', label: 'Fee', minWidth: 100 },
 ];
@@ -58,7 +58,7 @@ const Transactions = () => {
         Transactions
       </Typography>
       <Box sx={{ mt: '12px' }}>
-        <DataTable title='Transactions Table' pageId='transaction' rows={rows} columns={columns} />
+        <DataTable title='Transactions Table' rows={rows} columns={columns} />
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, mb: 2 }}>
           <Pagination count={pageCount} page={page} onChange={handlePaginationChange} showFirstButton showLastButton variant='outlined' shape='rounded' color='primary' />
         </Box>
