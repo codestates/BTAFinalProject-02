@@ -52,7 +52,9 @@ const Transaction = () => {
           <Box sx={{ flexBasis: '50%' }}>
             <Typography variant='subtitle2'>Sender Address</Typography>
             <p style={{ display: 'flex', alignItems: 'center' }}>
-              {data?.data.senderAddress}
+              <Link href={`/account/${data?.data.senderAddress}`} underline='hover'>
+                {data?.data.senderAddress}
+              </Link>
               <Tooltip title='클립보드에 복사'>
                 <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, data?.data.senderAddress)} sx={{ ml: '4px' }}>
                   <ContentCopyIcon style={{ fontSize: '14px' }} />
@@ -77,7 +79,9 @@ const Transaction = () => {
           <Box sx={{ flexBasis: '50%' }}>
             <Typography variant='subtitle2'>Recipient Address</Typography>
             <p style={{ display: 'flex', alignItems: 'center' }}>
-              {data?.data.recipientAddress}
+              <Link href={`/account/${data?.data.recipientAddress}`} underline='hover'>
+                {data?.data.recipientAddress}
+              </Link>
               <Tooltip title='클립보드에 복사'>
                 <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, data?.data.recipientAddress)} sx={{ ml: '4px' }}>
                   <ContentCopyIcon style={{ fontSize: '14px' }} />

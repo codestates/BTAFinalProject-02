@@ -9,6 +9,7 @@ import AppDrawer from './components/layout/AppDrawer';
 import { Toolbar } from '@mui/material';
 import Block from './pages/Block';
 import Transaction from './pages/Transaction';
+import Account from './pages/Account';
 const Router = () => {
   return (
     <BrowserRouter>
@@ -23,6 +24,7 @@ const Router = () => {
             <Route path='block/:id' element={<Block />} />
             <Route path='transactions' element={<Transactions />} />
             <Route path='transaction/:id' element={<Transaction />} />
+            <Route path='account/:address' element={<Account />} />
           </Routes>
         </Box>
       </Box>

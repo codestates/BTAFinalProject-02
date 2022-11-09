@@ -18,9 +18,7 @@ const Block = () => {
   const { id } = useParams();
   const { setToast } = useToast();
 
-  const { data, isLoading } = useQuery(['block', id], () => {
-    return id.length <= 8 ? getBlockByHeight(Number(id)) : getBlockById(id);
-  });
+  const { data, isLoading } = useQuery(['block', id], () => (id.length <= 8 ? getBlockByHeight(Number(id)) : getBlockById(id)));
   const truncate = (input) => {
     if (input.length > 15) return `${input.slice(0, 8)}...${input.slice(-7)}`;
     return input;
