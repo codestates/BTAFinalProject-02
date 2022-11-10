@@ -16,7 +16,7 @@ const transactionSchema = new mongoose.Schema({
 }, {timestamps: true})
 
 transactionSchema.statics.getList = function (page) {
-    return this.find({}).sort({blockHeight: -1}).skip(20 * page).limit(20);
+    return this.find({}).sort({blockHeight: -1}).skip(20 * (page-1)).limit(20);
 }
 
 transactionSchema.statics.findTransaction = function (id) {
