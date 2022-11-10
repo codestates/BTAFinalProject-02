@@ -19,5 +19,5 @@ export const getAccountInfo = async (address) => {
   return await _axios.get(`/accounts/${address}`);
 };
 export const getAccountTransactions = async (address, page) => {
-  return await _axios.get(`/accounts/${address}/transactions/${page}`);
+  return await _axios.get(`/accounts/${address}/transactions/${page ? page : 1}`);
 };

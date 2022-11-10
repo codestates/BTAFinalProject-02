@@ -29,7 +29,7 @@ const Transactions = () => {
   const [page, setPage] = useState(1);
   const [rows, setRows] = useState([]);
   const [pageCount, setPageCount] = useState(1);
-  const { data, isLoading, refetch } = useQuery(['transaction-list', 0], () => getTransactionList(0));
+  const { data, isLoading, refetch } = useQuery(['transaction-list', Number(page)], () => getTransactionList(Number(page)));
   useEffect(() => {
     const transactionList = [];
     data?.data.transactions.forEach((transaction) => {
@@ -48,6 +48,7 @@ const Transactions = () => {
   const handlePaginationChange = (e, value) => {
     setSearchParams({ page: value });
   };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
