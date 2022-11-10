@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@emotion/styled": "^11.10.5",
+    "@liskhq/lisk-client": "^5.2.2",
     "@liskhq/lisk-passphrase": "^3.1.1",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.13",
@@ -18,7 +19,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "webpack --watch --progress --config webpack.js",
+    "build": "webpack-cli --watch --progress --config webpack.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
