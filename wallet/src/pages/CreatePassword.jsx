@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { goTo } from "react-chrome-extension-router";
-import * as passphrase from "@liskhq/lisk-passphrase";
 import {
   Button,
   IconButton,
@@ -11,9 +10,7 @@ import {
 import FormControl from "@mui/material/FormControl";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useInput } from "../hooks/useInput";
-import Main from "./Request";
-import { setPublicKey } from "../utils/storage";
-import { useEffect } from "react";
+import Request from "./Request";
 
 const CreatePassword = () => {
   const [password, onChangePassword] = useInput("");
@@ -49,12 +46,8 @@ const CreatePassword = () => {
       return;
     }
 
-    goTo(Main);
+    goTo(Request);
   };
-
-  useEffect(() => {
-    setPublicKey();
-  }, []);
 
   return (
     <>

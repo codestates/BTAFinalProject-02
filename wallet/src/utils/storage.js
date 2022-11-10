@@ -1,16 +1,19 @@
 /*global chrome*/
 const passphrase = require("@liskhq/lisk-passphrase");
 
-export function setPublicKey() {
+export function setMnemonicCode() {
   const { Mnemonic } = passphrase;
-  const mnemonicCode = Mnemonic.generateMnemonic();
+  const mnemonic = Mnemonic.generateMnemonic();
 
-  chrome.storage.local.set(
-    {
-      mnemonicCode,
-    },
-    () => {
-      console.log("OK!");
-    }
-  );
+  chrome.storage.local.set({ mnemonic }, () => {
+    console.log("OK!");
+  });
+}
+
+export function getMnemonicCode() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get("mnemonic", (res) => {
+      resolve(res.mnemonic);
+    });
+  });
 }

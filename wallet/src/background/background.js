@@ -3,7 +3,7 @@ chrome.alarms.create({
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
-  chrome.storage.local.get(["mnemonic"], (res) => {
+  chrome.storage.local.get("mnemonic", (res) => {
     console.log(res.mnemonic);
   });
 });

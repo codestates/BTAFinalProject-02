@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, goTo } from "react-chrome-extension-router";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LockIcon from "@mui/icons-material/Lock";
 import { Button } from "@mui/material";
 import Home from "./Home";
 import Main from "./Request";
+import { getMnemonicCode, setMnemonicCode } from "../utils/storage";
 
 const Mnemonic = () => {
   const [showMnemonic, setShowMnemonic] = useState(false);
@@ -13,7 +14,9 @@ const Mnemonic = () => {
 
   const handleClickShowMnemonic = () => {
     if (mnemonic === "") {
-      setMnemonic("mnemonic");
+      getMnemonicCode().then((res) => {
+        setMnemonic(res);
+      });
     }
     setShowSummitBtn(false);
     setShowMnemonic(!showMnemonic);
@@ -22,6 +25,10 @@ const Mnemonic = () => {
   const onClickSubmit = () => {
     goTo(Home);
   };
+
+  useEffect(() => {
+    setMnemonicCode();
+  }, []);
 
   return (
     <>
