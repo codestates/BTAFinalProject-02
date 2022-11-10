@@ -28,10 +28,16 @@ transactionSchema.statics.getCount = function () {
 }
 
 transactionSchema.statics.findByAddress = function (address, page) {
-    return this.find({address: {$eq: address}}).sort({height: -1}).skip(20 * (page - 1)).limit(20);
+    return this.find({$or: [{senderAddress: {$eq: address}}, {recipientAddress: {$eq:address}}]}).sort({height: -1}).skip(20 * (page - 1)).limit(20);
 }
 
 transactionSchema.statics.getCountByAddress = function (address) {
-    return this.count({address: {$eq: address}});
+    return this.count({$or: [{senderAddress: {$eq: address}}, {recipientAddress: {$eq:address}}]});
+}
+transactionSchema.statics.getTransactionOutByAddress = function (address) {
+    return this.count({senderAddress: {$eq: address}});
+}
+transactionSchema.statics.getTransactionInByAddress = function (address) {
+    return this.count({recipientAddress: {$eq: address}});
 }
 module.exports = mongoose.model('Transaction', transactionSchema);

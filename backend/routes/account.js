@@ -42,8 +42,13 @@ router.get("/:address", (req, res) => {
     }
 
     clientCache.account.get(binaryAddress).then(account => {
-        account = reStructAccount(account);
-        res.send(account);
+        Transaction.getTransactionOutByAddress(binaryAddress).then(transactionOut => {
+            Transaction.getTransactionInByAddress(binaryAddress).then(transactionIn => {
+                account = reStructAccount(account);
+                account.transactionCount = {out: transactionOut, in: transactionIn}
+                res.send(account);
+            })
+        })
     })
 })
 
