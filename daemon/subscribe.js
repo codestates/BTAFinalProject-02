@@ -28,7 +28,7 @@ mongoose
             })
             lastStoredBlockHeight = 0;
         }
-        for (let i = lastStoredBlockHeight + 1; i < 21; i++) {
+        for (let i = lastStoredBlockHeight + 1; i < lastBlockHeight + 1; i++) {
             getBlockByHeight(i).then((block) => {
                 block.payload.map(payload => {
                     Transaction.create(reStructTransactionData(payload, block))
