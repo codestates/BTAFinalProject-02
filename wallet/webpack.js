@@ -1,12 +1,14 @@
 const path = require("path");
+const { ProvidePlugin } = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
+  mode: "production",
   entry: {
     popup: path.resolve("src/index.jsx"),
-    background: path.resolve("src/background.js"),
+    background: path.resolve("src/background/background.js"),
   },
   module: {
     rules: [
@@ -27,6 +29,15 @@ module.exports = {
   },
   resolve: {
     extensions: [".jsx", ".js"],
+    fallback: {
+      crypto: require.resolve("crypto-browserify"),
+      stream: require.resolve("stream-browserify"),
+      assert: require.resolve("assert"),
+      http: require.resolve("stream-http"),
+      https: require.resolve("https-browserify"),
+      os: require.resolve("os-browserify"),
+      url: require.resolve("url"),
+    },
   },
   plugins: [
     new CleanWebpackPlugin({
@@ -39,6 +50,10 @@ module.exports = {
           to: path.resolve("build"),
         },
       ],
+    }),
+    new ProvidePlugin({
+      process: "process/browser",
+      Buffer: ["buffer", "Buffer"],
     }),
     ...getHtmlPlugins(["popup"]),
   ],

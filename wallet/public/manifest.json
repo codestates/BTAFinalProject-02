@@ -9,15 +9,11 @@
     "128": "lisk.png"
   },
   "action": {
-    "default_icon": {
-      "16": "lisk.png",
-      "48": "lisk.png",
-      "128": "lisk.png"
-    },
+    "default_icon": "lisk.png",
     "default_popup": "popup.html",
     "default_title": "React Extension"
   },
-  "permissions": ["storage"],
+  "permissions": ["storage", "alarms"],
   "background": {
     "service_worker": "background.js"
   }
