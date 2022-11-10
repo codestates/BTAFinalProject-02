@@ -28,7 +28,7 @@ mongoose
             })
             lastStoredBlockHeight = 0;
         }
-        for (let i = lastStoredBlockHeight + 1; i < lastBlockHeight; i++) {
+        for (let i = lastStoredBlockHeight + 1; i < 21; i++) {
             getBlockByHeight(i).then((block) => {
                 block.payload.map(payload => {
                     Transaction.create(reStructTransactionData(payload, block))
@@ -89,6 +89,7 @@ function reStructTransactionData(transaction, block) {
     })
     transactionData.blockID = block.header.id.toString("hex")
     transactionData.blockHeight = block.header.height
+    transactionData.timestamp = block.header.timestamp
     console.log(transactionData)
     return transactionData
 }

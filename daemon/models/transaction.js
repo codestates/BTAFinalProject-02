@@ -13,7 +13,8 @@ const transactionSchema = new mongoose.Schema({
     signatures: {type: [String], required: true},
     id: {type: String, required: true, unique: true},
     blockID: {type: String, required: true, index: true},
-    blockHeight: {type: Number, required: true, index: true}
+    blockHeight: {type: Number, required: true, index: true},
+    timestamp: {type: Number, required: true}
 }, {timestamps: true})
 
 transactionSchema.statics.create = function (payload) {
