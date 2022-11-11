@@ -5,7 +5,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import { Button } from "@mui/material";
 import Home from "./Home";
 import Main from "./Request";
-import { getMnemonicCode, setMnemonicCode } from "../utils/storage";
+import { getMnemonicCode, setWalletHash } from "../utils/storage";
 
 const Mnemonic = () => {
   const [showMnemonic, setShowMnemonic] = useState(false);
@@ -23,12 +23,11 @@ const Mnemonic = () => {
   };
 
   const onClickSubmit = () => {
+    setWalletHash().then((res) => {
+      console.log(res);
+    });
     goTo(Home);
   };
-
-  useEffect(() => {
-    setMnemonicCode();
-  }, []);
 
   return (
     <>

@@ -11,6 +11,7 @@ import FormControl from "@mui/material/FormControl";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useInput } from "../hooks/useInput";
 import Request from "./Request";
+import { setPassword } from "../utils/storage";
 
 const CreatePassword = () => {
   const [password, onChangePassword] = useInput("");
@@ -46,6 +47,7 @@ const CreatePassword = () => {
       return;
     }
 
+    setPassword(password);
     goTo(Request);
   };
 

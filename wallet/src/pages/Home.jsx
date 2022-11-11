@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-chrome-extension-router";
 import Button from "@mui/material/Button";
 import Layout from "../components/layout/Layout";
 import Transaction from "./Transaction";
+import { getPublicKey, getWalletHash } from "../utils/storage";
 
 const Home = () => {
+  const [publickey, setPublickey] = useState("");
+
+  useEffect(() => {
+    getWalletHash().then((res) => {
+      console.log(res);
+    });
+    getPublicKey().then((res) => {
+      setPublickey(res);
+    });
+  }, []);
+
   return (
     <Layout>
       <div style={{ textAlign: "center" }}>
@@ -22,7 +34,7 @@ const Home = () => {
                 marginLeft: "20px",
               }}
             >
-              Account 1
+              Account
             </span>
             <span
               style={{
@@ -31,7 +43,7 @@ const Home = () => {
                 marginRight: "20px",
               }}
             >
-              Account 1
+              {publickey.slice(0, 8)}...{publickey.slice(-7)}
             </span>
           </span>
           <hr style={{ marginTop: "20px", backgroundColor: "#dada" }} />
