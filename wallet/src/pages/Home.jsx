@@ -3,17 +3,19 @@ import { Link } from "react-chrome-extension-router";
 import Button from "@mui/material/Button";
 import Layout from "../components/layout/Layout";
 import Transaction from "./Transaction";
-import { getPublicKey } from "../utils/storage";
+import { getAccount } from "../utils/storage";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { transactions } from "@liskhq/lisk-client";
 
 const Home = () => {
-  const [publickey, setPublickey] = useState("");
+  const [account, changeAccount] = useState({});
 
   useEffect(() => {
-    getPublicKey().then((res) => {
-      setPublickey(res);
+    getAccount((res) => {
+      console.log(res);
+      changeAccount(res);
     });
   }, []);
-
   return (
     <Layout>
       <div style={{ textAlign: "center" }}>
@@ -33,22 +35,34 @@ const Home = () => {
             >
               Account
             </span>
-            <span
+            <div
               style={{
                 cursor: "pointer",
                 fontSize: "16px",
                 marginRight: "20px",
+                lineHeight: "16px",
+                verticalAlign: "middle",
               }}
             >
-              {publickey.slice(0, 8)}...{publickey.slice(-7)}
-            </span>
+              {account.address
+                ? account.address.slice(0, 8) +
+                  "..." +
+                  account.address.slice(-7)
+                : ""}
+              <ContentCopyIcon onClick={() => copyInvoice(invoice)} />
+            </div>
           </span>
           <hr style={{ marginTop: "20px", backgroundColor: "#dada" }} />
         </div>
         <div style={{ marginTop: "45px" }}>
           <img width="50px" height="50px" src="lisk.png" alt="lisk gas" />
           <h2>LSK</h2>
-          <h3>0 LSK</h3>
+          <h3>
+            {account.balance
+              ? transactions.convertBeddowsToLSK(account.balance).toString()
+              : "0"}{" "}
+            LSK
+          </h3>
         </div>
       </div>
       <div style={{ textAlign: "center", marginTop: "40px" }}>

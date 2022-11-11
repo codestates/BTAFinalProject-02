@@ -1,27 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import { goTo } from "react-chrome-extension-router";
 import TextField from "@mui/material/TextField";
 import { useInput } from "../hooks/useInput";
-import { Button } from "@mui/material";
+import {
+  Button,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Home from "./Home";
+import { unlockWallet } from "../utils/storage";
 
 const LoginPage = () => {
-  const [login, onChangeLogin] = useInput("");
+  const [password, onChangePassword] = useInput("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const onClickSubmit = () => {
-    goTo(Home);
+    unlockWallet(password, (res) => {
+      if (res) goTo(Home);
+    });
+  };
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   return (
     <>
-      <div style={{ textAlign: "center", paddingTop: "50px" }}>
-        <TextField
+      <div style={{ textAlign: "center", paddingTop: "230px" }}>
+        <OutlinedInput
           label="비밀번호입력"
-          onChange={onChangeLogin}
+          onChange={onChangePassword}
           id="outlined-required"
-          type="password"
+          type={showPassword ? "text" : "password"}
           defaultValue=""
-          style={{ margin: "10px auto", width: "280px" }}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
         />
         <div style={{ paddingTop: "10px" }}>
           <Button variant="contained" onClick={onClickSubmit}>

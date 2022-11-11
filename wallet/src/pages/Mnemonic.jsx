@@ -5,7 +5,12 @@ import LockIcon from "@mui/icons-material/Lock";
 import { Button } from "@mui/material";
 import Home from "./Home";
 import Main from "./Request";
-import { getMnemonicCode, walletEncrypt } from "../utils/storage";
+import {
+  createPassphrase,
+  getMnemonicCode,
+  saveWallet,
+  walletEncrypt,
+} from "../utils/storage";
 
 const Mnemonic = () => {
   const [showMnemonic, setShowMnemonic] = useState(false);
@@ -13,20 +18,17 @@ const Mnemonic = () => {
   const [mnemonic, setMnemonic] = useState("");
 
   const handleClickShowMnemonic = () => {
-    if (mnemonic === "") {
-      getMnemonicCode().then((res) => {
-        setMnemonic(res);
-      });
-    }
+    createPassphrase((res) => {
+      setMnemonic(res);
+    });
     setShowSummitBtn(false);
     setShowMnemonic(!showMnemonic);
   };
 
   const onClickSubmit = () => {
-    walletEncrypt().then((res) => {
-      console.log(res);
+    saveWallet((res) => {
+      if (res) goTo(Home);
     });
-    goTo(Home);
   };
 
   return (

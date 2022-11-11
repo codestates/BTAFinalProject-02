@@ -1,62 +1,80 @@
 /*global chrome*/
-const { passphrase, apiClient, transactions } = require("@liskhq/lisk-client");
-const cryptojs = require("crypto-js");
-
-apiClient.createWSClient("ws://34.125.144.144:9000/ws").then((client) => {
-  client.account
-    .get("2ab00e25cc7f4c4764da1c97b0eefd13550c30d4")
-    .then(console.log);
+import wallet from "./scripts/wallet";
+wallet.init();
+chrome.runtime.onConnect.addListener(function (port) {
+  port.onMessage.addListener(function (request) {
+    trySwitch(request, port);
+  });
 });
 
-const { Mnemonic } = passphrase;
-let mnemonic;
-let password;
-
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  trySwitch(request, sendResponse);
-});
-
-async function trySwitch(request, sendResponse) {
+async function trySwitch(request, port) {
+  console.log(request);
   switch (request.type) {
     case "setPassword":
-      password = request.password;
-      sendResponse({ success: "success" });
+      wallet.setPassword(request.password);
+      port.postMessage({ type: "setPassword", result: true });
       break;
 
-    case "createMnemonic":
-      mnemonic = Mnemonic.generateMnemonic();
-      sendResponse({ mnemonic });
+    case "createPassphrase":
+      let passphrase = wallet.createPassphrase();
+      port.postMessage({ type: "createPassphrase", passphrase });
       break;
 
-    case "walletEncrypt":
-      if (request.mnemonic) {
-        mnemonic = request.mnemonic;
-      }
-      const encrypted = cryptojs.AES.encrypt(mnemonic, password).toString();
-
-      const result1 = await setHashLocalStorage(encrypted);
-
-      await Promise.all([result1]);
-      sendResponse({ result: "success" });
+    case "saveWallet":
+      wallet
+        .saveWallet()
+        .then(() => {
+          port.postMessage({ type: "saveWallet", result: true });
+        })
+        .catch(() => {
+          port.postMessage({ type: "saveWallet", result: false });
+        });
       break;
 
-    case "walletDecrypt":
-      const bytes = cryptojs.AES.decrypt(request.encrypted, request.password);
-      const decrypted = bytes.toString(cryptojs.enc.Utf8);
-      mnemonic = decrypted;
+    case "loadPassphrase":
+      wallet
+        .loadPassphrase(request.passphrase)
+        .then(() => {
+          port.postMessage({ type: "loadPassphrase", result: true });
+        })
+        .catch(() => {
+          port.postMessage({ type: "loadPassphrase", result: false });
+        });
+      break;
 
-      sendResponse({ result: "success" });
+    case "unlockWallet":
+      wallet
+        .unlockWallet(request.password)
+        .then(() => {
+          port.postMessage({ type: "unlockWallet", result: true });
+        })
+        .catch(() => {
+          port.postMessage({ type: "unlockWallet", result: false });
+        });
+      break;
+
+    case "haveWallet":
+      wallet
+        .haveWallet()
+        .then(() => {
+          port.postMessage({ type: "haveWallet", result: true });
+        })
+        .catch(() => {
+          port.postMessage({ type: "haveWallet", result: false });
+        });
+      break;
+
+    case "isLocked":
+      port.postMessage({ type: "isLocked", isLocked: wallet.isLocked() });
+      break;
+
+    case "getAccount":
+      wallet.getAccount().then((account) => {
+        port.postMessage({ type: "getAccount", account: account });
+      });
       break;
 
     default:
       break;
   }
-}
-
-function setHashLocalStorage(hashedPassword) {
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.set({ encrypted: hashedPassword }, () => {
-      resolve("success");
-    });
-  });
 }

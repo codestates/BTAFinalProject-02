@@ -47,8 +47,9 @@ const CreatePassword = () => {
       return;
     }
 
-    setPassword(password);
-    goTo(Request);
+    setPassword(password, (res) => {
+      if (res) goTo(Request);
+    });
   };
 
   return (

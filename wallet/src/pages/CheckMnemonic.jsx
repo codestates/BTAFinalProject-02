@@ -4,7 +4,7 @@ import { Button, TextField } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Home from "./Home";
 import Main from "./Request";
-import { walletEncrypt } from "../utils/storage";
+import { loadPassphrase, walletEncrypt } from "../utils/storage";
 
 const CheckMnemonic = () => {
   const [text, setText] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
@@ -18,10 +18,9 @@ const CheckMnemonic = () => {
   };
 
   const onClickSubmit = () => {
-    walletEncrypt("mnemonic code").then((res) => {
-      console.log(res);
+    loadPassphrase(text.join(" "), (res) => {
+      if (res) goTo(Home);
     });
-    goTo(Home);
   };
 
   return (

@@ -1,46 +1,58 @@
 /*global chrome*/
 
-export function setPassword(password) {
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ type: "setPassword", password }, (res) => {
-      resolve(res.success);
-    });
-  });
+const port = chrome.runtime.connect();
+
+port.onMessage.addListener(function (msg) {
+  console.log(msg);
+  if (msg.type === "setPassword") callbacks.setPassword(msg.result);
+  else if (msg.type === "createPassphrase")
+    callbacks.createPassphrase(msg.passphrase);
+  else if (msg.type === "saveWallet") callbacks.saveWallet(msg.result);
+  else if (msg.type === "unlockWallet") callbacks.unlockWallet(msg.result);
+  else if (msg.type === "haveWallet") callbacks.haveWallet(msg.result);
+  else if (msg.type === "isLocked") callbacks.isLocked(msg.isLocked);
+  else if (msg.type === "getAccount") callbacks.getAccount(msg.account);
+  else if (msg.type === "loadPassphrase") callbacks.loadPassphrase(msg.result);
+});
+
+let callbacks = {};
+
+export function setPassword(password, callback) {
+  callbacks.setPassword = callback;
+  port.postMessage({ type: "setPassword", password });
 }
 
-export function getMnemonicCode() {
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ type: "createMnemonic" }, (res) => {
-      resolve(res.mnemonic);
-    });
-  });
+export function createPassphrase(callback) {
+  callbacks.createPassphrase = callback;
+  port.postMessage({ type: "createPassphrase" });
 }
 
-export function walletEncrypt(mnemonic) {
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ type: "walletEncrypt", mnemonic }, (res) => {
-      resolve(res);
-    });
-  });
+export function saveWallet(callback) {
+  callbacks.saveWallet = callback;
+  port.postMessage({ type: "saveWallet" });
 }
 
-export function walletDecrypt(password) {
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.get("encrypted", (res) => {
-      chrome.runtime.sendMessage(
-        { type: "walletDecrypt", encrypted: res.encrypted, password },
-        (res) => {
-          resolve(res);
-        }
-      );
-    });
-  });
+export function unlockWallet(password, callback) {
+  callbacks.unlockWallet = callback;
+  port.postMessage({ type: "unlockWallet", password });
 }
 
-export function getPublicKey() {
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.get("publicKey", (res) => {
-      resolve(res.publicKey);
-    });
-  });
+export function haveWallet(callback) {
+  callbacks.haveWallet = callback;
+  port.postMessage({ type: "haveWallet" });
+}
+
+export function isLocked(callback) {
+  callbacks.isLocked = callback;
+  port.postMessage({ type: "isLocked" });
+}
+
+export function getAccount(callback) {
+  callbacks.getAccount = callback;
+  port.postMessage({ type: "getAccount" });
+}
+
+export function loadPassphrase(passphrase, callback) {
+  callbacks.loadPassphrase = callback;
+  port.postMessage({ type: "loadPassphrase", passphrase });
 }
