@@ -1,4 +1,9 @@
-import { apiClient, passphrase, cryptography } from "@liskhq/lisk-client";
+import {
+  apiClient,
+  passphrase,
+  cryptography,
+  transactions,
+} from "@liskhq/lisk-client";
 import cryptojs from "crypto-js";
 
 const Mnemonic = passphrase.Mnemonic;
@@ -6,7 +11,8 @@ const Mnemonic = passphrase.Mnemonic;
 const wallet = {
   init: function () {
     let self = this;
-    apiClient.createWSClient("ws://34.125.144.144:9000/ws").then((client) => {
+    this.network = "privatenet";
+    apiClient.createWSClient("ws://34.125.144.144:8000/ws").then((client) => {
       self.client = client;
     });
   },
@@ -117,6 +123,41 @@ const wallet = {
           accountData.balance = "0";
           resolve(accountData);
         });
+    });
+  },
+  sendTransaction: function (recipientAddress, amount) {
+    if (recipientAddress.startsWith("lsk")) {
+      try {
+        recipientAddress =
+          cryptography.getAddressFromLisk32Address(recipientAddress);
+      } catch (e) {
+        return new Promise((resolve, reject) => {
+          reject();
+        });
+      }
+    }
+    return new Promise((resolve) => {
+      this.client.account.get(this.account.binaryAddress).then((account) => {
+        this.client.transaction
+          .create(
+            {
+              moduleID: 2,
+              assetID: 0,
+              fee: BigInt(500000),
+              nonce: account.sequence.nonce,
+              asset: {
+                amount: BigInt(transactions.convertLSKToBeddows(amount)),
+                recipientAddress: Buffer.from(recipientAddress, "hex"),
+                data: "send token",
+              },
+              senderPublicKey: Buffer.from(this.account.publicKey, "hex"),
+            },
+            this.account.passphrase
+          )
+          .then((transaction) => {
+            this.client.transaction.send(transaction).then(resolve);
+          });
+      });
     });
   },
 };

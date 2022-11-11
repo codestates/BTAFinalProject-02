@@ -74,6 +74,17 @@ async function trySwitch(request, port) {
       });
       break;
 
+    case "sendTransaction":
+      wallet
+        .sendTransaction(request.recipientAddress, request.amount)
+        .then(() => {
+          port.postMessage({ type: "sendTransaction", result: true });
+        })
+        .catch(() => {
+          port.postMessage({ type: "sendTransaction", result: false });
+        });
+      break;
+
     default:
       break;
   }

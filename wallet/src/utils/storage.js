@@ -13,6 +13,8 @@ port.onMessage.addListener(function (msg) {
   else if (msg.type === "isLocked") callbacks.isLocked(msg.isLocked);
   else if (msg.type === "getAccount") callbacks.getAccount(msg.account);
   else if (msg.type === "loadPassphrase") callbacks.loadPassphrase(msg.result);
+  else if (msg.type === "sendTransaction")
+    callbacks.sendTransaction(msg.result);
 });
 
 let callbacks = {};
@@ -55,4 +57,9 @@ export function getAccount(callback) {
 export function loadPassphrase(passphrase, callback) {
   callbacks.loadPassphrase = callback;
   port.postMessage({ type: "loadPassphrase", passphrase });
+}
+
+export function sendTransaction(recipientAddress, amount, callback) {
+  callbacks.sendTransaction = callback;
+  port.postMessage({ type: "sendTransaction", recipientAddress, amount });
 }

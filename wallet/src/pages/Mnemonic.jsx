@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, goTo } from "react-chrome-extension-router";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LockIcon from "@mui/icons-material/Lock";

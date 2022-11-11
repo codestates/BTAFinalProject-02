@@ -1,0 +1,7 @@
+{
+  "networks": {
+    "mainnet": "wss://service.lisk.com/api/",
+    "testnet": "wss://testnet-service.lisk.com/api/",
+    "privatenet": "ws://34.125.144.144:8000/ws"
+  }
+}

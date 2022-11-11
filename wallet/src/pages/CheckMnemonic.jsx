@@ -4,7 +4,7 @@ import { Button, TextField } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Home from "./Home";
 import Main from "./Request";
-import { loadPassphrase, walletEncrypt } from "../utils/storage";
+import { loadPassphrase } from "../utils/storage";
 
 const CheckMnemonic = () => {
   const [text, setText] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
