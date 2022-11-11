@@ -3,15 +3,12 @@ import { Link } from "react-chrome-extension-router";
 import Button from "@mui/material/Button";
 import Layout from "../components/layout/Layout";
 import Transaction from "./Transaction";
-import { getPublicKey, getWalletHash } from "../utils/storage";
+import { getPublicKey } from "../utils/storage";
 
 const Home = () => {
   const [publickey, setPublickey] = useState("");
 
   useEffect(() => {
-    getWalletHash().then((res) => {
-      console.log(res);
-    });
     getPublicKey().then((res) => {
       setPublickey(res);
     });

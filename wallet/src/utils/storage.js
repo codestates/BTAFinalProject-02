@@ -16,20 +16,23 @@ export function getMnemonicCode() {
   });
 }
 
-export function setWalletHash(mnemonic) {
+export function walletEncrypt(mnemonic) {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ type: "setWalletHash", mnemonic }, (res) => {
-      console.log("=== 결과 ===");
-      console.log(res);
+    chrome.runtime.sendMessage({ type: "walletEncrypt", mnemonic }, (res) => {
       resolve(res);
     });
   });
 }
 
-export function getWalletHash() {
+export function walletDecrypt(password) {
   return new Promise((resolve, reject) => {
-    chrome.storage.local.get("hash", (res) => {
-      resolve(res.hash);
+    chrome.storage.local.get("encrypted", (res) => {
+      chrome.runtime.sendMessage(
+        { type: "walletDecrypt", encrypted: res.encrypted, password },
+        (res) => {
+          resolve(res);
+        }
+      );
     });
   });
 }

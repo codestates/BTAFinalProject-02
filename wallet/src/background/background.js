@@ -1,10 +1,5 @@
 /*global chrome*/
-const {
-  passphrase,
-  cryptography,
-  apiClient,
-  transactions,
-} = require("@liskhq/lisk-client");
+const { passphrase, apiClient, transactions } = require("@liskhq/lisk-client");
 const cryptojs = require("crypto-js");
 
 apiClient.createWSClient("ws://34.125.144.144:9000/ws").then((client) => {
@@ -24,7 +19,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 async function trySwitch(request, sendResponse) {
   switch (request.type) {
     case "setPassword":
-      password = cryptojs.SHA256(request.password).toString();
+      password = request.password;
       sendResponse({ success: "success" });
       break;
 
@@ -33,18 +28,23 @@ async function trySwitch(request, sendResponse) {
       sendResponse({ mnemonic });
       break;
 
-    case "setWalletHash":
+    case "walletEncrypt":
       if (request.mnemonic) {
         mnemonic = request.mnemonic;
       }
-      const walletString = password + mnemonic;
-      const hashedPassword = cryptojs.SHA256(walletString).toString();
+      const encrypted = cryptojs.AES.encrypt(mnemonic, password).toString();
 
-      const result1 = await setHashLocalStorage(hashedPassword);
-      const result2 = await setPublicKeyLocalStorage();
+      const result1 = await setHashLocalStorage(encrypted);
 
-      const total = await Promise.all([result1, result2]);
-      console.log(total);
+      await Promise.all([result1]);
+      sendResponse({ result: "success" });
+      break;
+
+    case "walletDecrypt":
+      const bytes = cryptojs.AES.decrypt(request.encrypted, request.password);
+      const decrypted = bytes.toString(cryptojs.enc.Utf8);
+      mnemonic = decrypted;
+
       sendResponse({ result: "success" });
       break;
 
@@ -55,20 +55,8 @@ async function trySwitch(request, sendResponse) {
 
 function setHashLocalStorage(hashedPassword) {
   return new Promise((resolve, reject) => {
-    chrome.storage.local.set({ hash: hashedPassword }, () => {
+    chrome.storage.local.set({ encrypted: hashedPassword }, () => {
       resolve("success");
     });
-  });
-}
-
-function setPublicKeyLocalStorage() {
-  return new Promise((resolve, reject) => {
-    const key = cryptography.getPrivateAndPublicKeyFromPassphrase(mnemonic);
-    chrome.storage.local.set(
-      { publicKey: key.publicKey.toString("hex") },
-      () => {
-        resolve("success");
-      }
-    );
   });
 }
