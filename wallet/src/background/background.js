@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 async function trySwitch(request, sendResponse) {
   switch (request.type) {
     case "setPassword":
-      password = request.password;
+      password = cryptojs.SHA256(request.password).toString();
       sendResponse({ success: "success" });
       break;
 
@@ -41,7 +41,7 @@ async function trySwitch(request, sendResponse) {
       const hashedPassword = cryptojs.SHA256(walletString).toString();
 
       const result1 = await setHashLocalStorage(hashedPassword);
-      const result2 = await setPublicKeyLocalStorage2();
+      const result2 = await setPublicKeyLocalStorage();
 
       const total = await Promise.all([result1, result2]);
       console.log(total);
@@ -61,7 +61,7 @@ function setHashLocalStorage(hashedPassword) {
   });
 }
 
-function setPublicKeyLocalStorage2() {
+function setPublicKeyLocalStorage() {
   return new Promise((resolve, reject) => {
     const key = cryptography.getPrivateAndPublicKeyFromPassphrase(mnemonic);
     chrome.storage.local.set(
