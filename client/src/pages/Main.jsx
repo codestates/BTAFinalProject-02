@@ -1,8 +1,8 @@
 import React from "react";
 import { Grid, Typography } from "@mui/material";
-import DashBoardCard from "../components/DashBoardCard";
-import LastTransactions from "../components/LastTransactions";
-import LastBlocks from "../components/LastBlocks";
+import DashBoardCard from "../components/dashboard/DashBoardCard";
+import LastTransactions from "../components/dashboard/LastTransactions";
+import LastBlocks from "../components/dashboard/LastBlocks";
 
 const createData = (blockheight, finalizedBlockheight, txLastOneDay, txSupply) => {
   return { blockheight, finalizedBlockheight, txLastOneDay, txSupply };
