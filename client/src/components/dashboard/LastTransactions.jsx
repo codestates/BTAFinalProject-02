@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import SyncAltIcon from "@mui/icons-material/SyncAlt";
-import { BeddowsToLSK, timestampToDate } from "../../utils/conversion-utils";
+import { BeddowsToLSK } from "../../utils/conversion-utils";
 import LoadingSpinner from "../common/LoadingSpinner";
 import { getTransactionList } from "../../hooks/useAxios";
 import useToast from "../../hooks/useToast";
@@ -30,10 +30,20 @@ const createCellData = (
   tempAmount,
   tempFee
 ) => {
-  const date = timestampToDate(timestamp);
+  const now = new Date();
+  const currentTime = Math.floor(now.getTime() / 1000);
+  const interval = currentTime - timestamp;
+
+  let dateText;
+  if (interval < 60) dateText = Math.floor(interval) + " 초 전";
+  else if (interval < 60 * 60) dateText = Math.floor(interval / 60) + " 분 전";
+  else if (interval < 60 * 60 * 24)
+    dateText = Math.floor(interval / (60 * 60)) + " 시간 전";
+  else dateText = Math.floor(interval / (60 * 60 * 24)) + " 일 전";
+
   const amount = `${BeddowsToLSK(tempAmount)} LSK`;
   const fee = `${BeddowsToLSK(tempFee)} LSK`;
-  return { transactionid: txId, date, sender, recipient, amount, fee };
+  return { txId, date: dateText, sender, recipient, amount, fee };
 };
 
 const LastTransactions = () => {
@@ -80,9 +90,9 @@ const LastTransactions = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableBody>
                 {rows &&
-                  rows.map((row) => (
+                  rows.map((row, index) => (
                     <TableRow
-                      key={row.id}
+                      key={index}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <>
@@ -91,17 +101,17 @@ const LastTransactions = () => {
                         </TableCell>
                         <TableCell component="th" scope="row">
                           <Link
-                            href={`/transaction/${row.transactionid}`}
+                            href={`/transaction/${row.txId}`}
                             underline="hover"
                           >
-                            {row.transactionid.slice(0, 8)}...
-                            {row.transactionid.slice(-7)}
+                            {row.txId.slice(0, 8)}...
+                            {row.txId.slice(-7)}
                           </Link>
                           <Tooltip title="클립보드에 복사">
                             <IconButton
                               size="small"
                               aria-label="copy text"
-                              onClick={(e) => copyText(e, row.transactionid)}
+                              onClick={(e) => copyText(e, row.txId)}
                               sx={{ ml: "4px" }}
                             >
                               <ContentCopyIcon style={{ fontSize: "14px" }} />

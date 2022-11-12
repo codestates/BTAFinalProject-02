@@ -18,14 +18,22 @@ import {
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { BeddowsToLSK, timestampToDate } from "../../utils/conversion-utils";
+import { BeddowsToLSK } from "../../utils/conversion-utils";
 import LoadingSpinner from "../common/LoadingSpinner";
 import useToast from "../../hooks/useToast";
 
 const createCellData = (blockid, timestamp, generatorAddress, tempReward) => {
-  const date = timestampToDate(new Date(timestamp));
+  const now = new Date();
+  const currentTime = Math.floor(now.getTime() / 1000);
+  const interval = currentTime - timestamp;
+
+  let dateText;
+  if (interval <= 0) dateText = "방금 전";
+  else if (interval < 60) dateText = Math.floor(interval) + " 초 전";
+  else dateText = Math.floor(interval / 60) + " 분 전";
+
   const reward = `${BeddowsToLSK(tempReward)} LSK`;
-  return { blockid, date, generatorAddress, reward };
+  return { blockid, date: dateText, generatorAddress, reward };
 };
 
 const LastBlocks = () => {
@@ -72,9 +80,9 @@ const LastBlocks = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableBody>
                 {rows &&
-                  rows.map((row) => (
+                  rows.map((row, index) => (
                     <TableRow
-                      key={row.id}
+                      key={index}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <>
