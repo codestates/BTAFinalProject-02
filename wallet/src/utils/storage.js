@@ -13,8 +13,7 @@ port.onMessage.addListener(function (msg) {
   else if (msg.type === "isLocked") callbacks.isLocked(msg.isLocked);
   else if (msg.type === "getAccount") callbacks.getAccount(msg.account);
   else if (msg.type === "loadPassphrase") callbacks.loadPassphrase(msg.result);
-  else if (msg.type === "sendTransaction")
-    callbacks.sendTransaction(msg.result);
+  else if (msg.type === "sendLSK") callbacks.sendLSK(msg.result);
   else if (msg.type === "changeNetwork") callbacks.changeNetwork(msg.result);
   else if (msg.type === "lockWallet") callbacks.lockWallet(msg.result);
 });
@@ -61,9 +60,9 @@ export function loadPassphrase(passphrase, callback) {
   port.postMessage({ type: "loadPassphrase", passphrase });
 }
 
-export function sendTransaction(recipientAddress, amount, callback) {
-  callbacks.sendTransaction = callback;
-  port.postMessage({ type: "sendTransaction", recipientAddress, amount });
+export function sendLSK(recipientAddress, amount, callback) {
+  callbacks.sendLSK = callback;
+  port.postMessage({ type: "sendLSK", recipientAddress, amount });
 }
 
 export function changeNetwork(net, callback) {

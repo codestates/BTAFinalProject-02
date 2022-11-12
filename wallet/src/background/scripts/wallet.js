@@ -3,34 +3,18 @@ import {
   passphrase,
   cryptography,
   transactions,
+  codec,
 } from "@liskhq/lisk-client";
 import cryptojs from "crypto-js";
 import config from "../configs/config";
+import client from "./client";
 const Mnemonic = passphrase.Mnemonic;
 
 const wallet = {
-  init: function () {
-    let self = this;
-    this.network = "privatenet";
-    apiClient.createWSClient(config.networks[this.network]).then((client) => {
-      self.client = client;
-    });
-  },
-  lockWallet:function(){
+  lockWallet: function () {
     this.account = undefined;
     this.password = undefined;
     this.passphrase = undefined;
-  },
-  changeNetwork: function (net) {
-    let self = this;
-    console.log(config);
-    return new Promise((resolve) => {
-      apiClient.createWSClient(config.networks[net]).then((client) => {
-        self.client = client;
-        self.network = net;
-        resolve();
-      });
-    });
   },
   setPassword: function (password) {
     this.password = password;
@@ -40,7 +24,6 @@ const wallet = {
     return this.passphrase;
   },
   loadPassphrase: function (passphrase) {
-    console.log(passphrase);
     if (Mnemonic.validateMnemonic(passphrase)) {
       this.passphrase = passphrase;
       return this.saveWallet();
@@ -75,7 +58,6 @@ const wallet = {
             binaryAddress,
             address,
           };
-          console.log(self.account);
           resolve();
         }
       );
@@ -125,54 +107,137 @@ const wallet = {
     return this.account === undefined;
   },
   getAccount: function () {
+    let self = this;
     return new Promise((resolve) => {
-      this.client.account
-        .get(this.account.binaryAddress)
-        .then((accountInfo) => {
-          console.log(accountInfo);
-          let accountData = this.account;
-          accountData.balance = accountInfo.token.balance.toString();
+      client
+        .getAccount(this.account.address)
+        .then((data) => {
+          let accountData = self.account;
+          delete accountData.passphrase;
+          accountData.balance = data.summary.balance;
+          accountData.network = client.network;
           resolve(accountData);
         })
         .catch(() => {
-          let accountData = this.account;
+          let accountData = self.account;
+          delete accountData.passphrase;
           accountData.balance = "0";
+          accountData.network = client.network;
           resolve(accountData);
         });
     });
   },
-  sendTransaction: function (recipientAddress, amount) {
-    if (recipientAddress.startsWith("lsk")) {
-      try {
+  sendLSK: function (recipientAddress, amount) {
+    return new Promise((resolve) => {
+      if (recipientAddress.startsWith("lsk")) {
         recipientAddress =
           cryptography.getAddressFromLisk32Address(recipientAddress);
-      } catch (e) {
-        return new Promise((resolve, reject) => {
-          reject();
-        });
       }
-    }
-    return new Promise((resolve) => {
-      this.client.account.get(this.account.binaryAddress).then((account) => {
-        this.client.transaction
-          .create(
-            {
-              moduleID: 2,
-              assetID: 0,
-              fee: BigInt(500000),
-              nonce: account.sequence.nonce,
-              asset: {
-                amount: BigInt(transactions.convertLSKToBeddows(amount)),
-                recipientAddress: Buffer.from(recipientAddress, "hex"),
-                data: "send token",
+      client.getAccount().then((data) => {
+        let transaction = transactions.signTransaction(
+          {
+            $id: "lisk/transfer-transaction",
+            title: "Transfer transaction asset",
+            type: "object",
+            required: ["amount", "recipientAddress", "data"],
+            properties: {
+              amount: {
+                dataType: "uint64",
+                fieldNumber: 1,
               },
-              senderPublicKey: Buffer.from(this.account.publicKey, "hex"),
+              recipientAddress: {
+                dataType: "bytes",
+                fieldNumber: 2,
+                minLength: 20,
+                maxLength: 20,
+              },
+              data: {
+                dataType: "string",
+                fieldNumber: 3,
+                minLength: 0,
+                maxLength: 64,
+              },
             },
-            this.account.passphrase
-          )
-          .then((transaction) => {
-            this.client.transaction.send(transaction).then(resolve);
-          });
+          },
+          {
+            moduleID: 2,
+            assetID: 0,
+            fee: BigInt(500000),
+            nonce: BigInt(data.sequence.nonce),
+            senderPublicKey: Buffer.from(this.account.publicKey, "hex"),
+            asset: {
+              amount: BigInt(transactions.convertLSKToBeddows(amount)),
+              recipientAddress: Buffer.from(recipientAddress, "hex"),
+              data: "send token",
+            },
+          },
+          client.networkIdentifier,
+          this.account.passphrase
+        );
+        const encodedAsset = codec.codec.encode(
+          {
+            $id: "lisk/transfer-transaction",
+            title: "Transfer transaction asset",
+            type: "object",
+            required: ["amount", "recipientAddress", "data"],
+            properties: {
+              amount: {
+                dataType: "uint64",
+                fieldNumber: 1,
+              },
+              recipientAddress: {
+                dataType: "bytes",
+                fieldNumber: 2,
+                minLength: 20,
+                maxLength: 20,
+              },
+              data: {
+                dataType: "string",
+                fieldNumber: 3,
+                minLength: 0,
+                maxLength: 64,
+              },
+            },
+          },
+          transaction.asset
+        );
+        let encodedTransaction = codec.codec.encode(
+          {
+            $id: "lisk/transaction",
+            type: "object",
+            required: [
+              "moduleID",
+              "assetID",
+              "nonce",
+              "fee",
+              "senderPublicKey",
+              "asset",
+            ],
+            properties: {
+              moduleID: { dataType: "uint32", fieldNumber: 1, minimum: 2 },
+              assetID: { dataType: "uint32", fieldNumber: 2 },
+              nonce: { dataType: "uint64", fieldNumber: 3 },
+              fee: { dataType: "uint64", fieldNumber: 4 },
+              senderPublicKey: {
+                dataType: "bytes",
+                fieldNumber: 5,
+                minLength: 32,
+                maxLength: 32,
+              },
+              asset: { dataType: "bytes", fieldNumber: 6 },
+              signatures: {
+                type: "array",
+                items: { dataType: "bytes" },
+                fieldNumber: 7,
+              },
+            },
+          },
+          {
+            ...transaction,
+            asset: encodedAsset,
+          }
+        );
+        client.sendTransaction(transaction.signatures[0].toString("hex"));
       });
     });
   },

@@ -6,7 +6,7 @@ import { Button } from "@mui/material";
 import Home from "./Home";
 import Layout from "../components/layout/Layout";
 import { useInput } from "../hooks/useInput";
-import { getAccount, sendTransaction } from "../utils/storage";
+import { getAccount, sendLSK } from "../utils/storage";
 import { transactions } from "@liskhq/lisk-client";
 
 const Transaction = () => {
@@ -14,7 +14,7 @@ const Transaction = () => {
   const [recipientAddress, onChangeRecipientAddress] = useInput("");
   const [account, changeAccount] = useState({});
   const onClickSubmit = () => {
-    sendTransaction(recipientAddress, sendAmount, (res) => {
+    sendLSK(recipientAddress, sendAmount, (res) => {
       if (res) goTo(Home);
     });
   };

@@ -1,6 +1,8 @@
 /*global chrome*/
 import wallet from "./scripts/wallet";
-wallet.init();
+import client from "./scripts/client";
+
+client.init();
 chrome.runtime.onConnect.addListener(function (port) {
   port.onMessage.addListener(function (request) {
     trySwitch(request, port);
@@ -74,22 +76,26 @@ async function trySwitch(request, port) {
       });
       break;
 
-    case "sendTransaction":
+    case "sendLSK":
       wallet
-        .sendTransaction(request.recipientAddress, request.amount)
+        .sendLSK(request.recipientAddress, request.amount)
         .then(() => {
-          port.postMessage({ type: "sendTransaction", result: true });
+          port.postMessage({ type: "sendLSK", result: true });
         })
-        .catch(() => {
-          port.postMessage({ type: "sendTransaction", result: false });
+        .catch((e) => {
+          console.log(e);
+          port.postMessage({ type: "sendLSK", result: false });
         });
       break;
 
     case "changeNetwork":
-      wallet
+      client
         .changeNetwork(request.net)
         .then(() => {
           port.postMessage({ type: "changeNetwork", result: true });
+          wallet.getAccount().then((account) => {
+            port.postMessage({ type: "getAccount", account: account });
+          });
         })
         .catch(() => {
           port.postMessage({ type: "changeNetwork", result: false });
@@ -98,7 +104,7 @@ async function trySwitch(request, port) {
 
     case "lockWallet":
       wallet.lockWallet();
-      port.postMessage({ type: "lockWallet", result: true});
+      port.postMessage({ type: "lockWallet", result: true });
       break;
 
     default:
