@@ -96,6 +96,11 @@ async function trySwitch(request, port) {
         });
       break;
 
+    case "lockWallet":
+      wallet.lockWallet();
+      port.postMessage({ type: "lockWallet", result: true});
+      break;
+
     default:
       break;
   }

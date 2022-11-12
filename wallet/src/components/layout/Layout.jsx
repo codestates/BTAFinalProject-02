@@ -3,17 +3,23 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import LockIcon from "@mui/icons-material/Lock";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import { changeNetwork } from "../../utils/storage";
+import {changeNetwork, lockWallet} from "../../utils/storage";
+import {goTo} from "react-chrome-extension-router";
+import LoginPage from "../../pages/LoginPage";
 
 const Layout = ({ children }) => {
   const [anchorEl, setAnchorEl] = useState();
   const [net, onChangeNet] = useState("privatenet");
   const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+    goTo(LoginPage)
+    lockWallet((res)=>{
+      if(res) goTo(LoginPage)
+    })
   };
 
   const handleClose = () => {
@@ -60,7 +66,7 @@ const Layout = ({ children }) => {
             onClick={handleMenu}
             color="inherit"
           >
-            <AccountCircle />
+            <LockIcon />
           </IconButton>
           <Menu
             id="menu-appbar"

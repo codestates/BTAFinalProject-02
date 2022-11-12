@@ -16,6 +16,7 @@ port.onMessage.addListener(function (msg) {
   else if (msg.type === "sendTransaction")
     callbacks.sendTransaction(msg.result);
   else if (msg.type === "changeNetwork") callbacks.changeNetwork(msg.result);
+  else if (msg.type === "lockWallet") callbacks.lockWallet(msg.result);
 });
 
 let callbacks = {};
@@ -68,4 +69,9 @@ export function sendTransaction(recipientAddress, amount, callback) {
 export function changeNetwork(net, callback) {
   callbacks.changeNetwork = callback;
   port.postMessage({ type: "changeNetwork", net });
+}
+
+export function lockWallet(callback) {
+  callbacks.lockWallet = callback;
+  port.postMessage({ type: "lockWallet" });
 }

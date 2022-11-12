@@ -16,6 +16,11 @@ const wallet = {
       self.client = client;
     });
   },
+  lockWallet:function(){
+    this.account = undefined;
+    this.password = undefined;
+    this.passphrase = undefined;
+  },
   changeNetwork: function (net) {
     let self = this;
     console.log(config);

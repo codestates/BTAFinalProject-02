@@ -5,12 +5,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import { Button } from "@mui/material";
 import Home from "./Home";
 import Main from "./Request";
-import {
-  createPassphrase,
-  getMnemonicCode,
-  saveWallet,
-  walletEncrypt,
-} from "../utils/storage";
+import { createPassphrase, saveWallet } from "../utils/storage";
 
 const Mnemonic = () => {
   const [showMnemonic, setShowMnemonic] = useState(false);
