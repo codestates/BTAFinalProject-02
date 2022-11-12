@@ -12,6 +12,7 @@ import useToast from '../hooks/useToast';
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 import { useSearchParams } from 'react-router-dom';
+import NotFound from '../components/NotFound';
 
 const columns = [
   { id: 'transactionid', label: 'Transaction ID', minWidth: 180 },
@@ -66,6 +67,10 @@ const Account = () => {
 
   if (accountQuery.isLoading || transactionQuery.isLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (!accountQuery.data?.data) {
+    return <NotFound text='해당 블록을 찾을 수 없습니다. 확인 부탁드립니다.' />;
   }
 
   return (

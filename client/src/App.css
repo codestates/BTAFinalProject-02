@@ -5,3 +5,6 @@ body,
 #root > div > div {
   height: 100%;
 }
+.filter-white {
+  filter: brightness(0) invert(1);
+}

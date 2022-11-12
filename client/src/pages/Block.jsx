@@ -8,6 +8,7 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import { getBlockByHeight, getBlockById } from '../hooks/useAxios';
 import { BeddowsToLSK, timestampToDate } from '../utils/conversion-utils';
 import useToast from '../hooks/useToast';
+import NotFound from '../components/NotFound';
 
 const columns = [
   { id: 'index', label: 'Index' },
@@ -20,7 +21,7 @@ const Block = () => {
 
   const { data, isLoading } = useQuery(['block', id], () => (id.length <= 8 ? getBlockByHeight(Number(id)) : getBlockById(id)));
   const truncate = (input) => {
-    if (input.length > 15) return `${input.slice(0, 8)}...${input.slice(-7)}`;
+    if (input?.length > 15) return `${input.slice(0, 8)}...${input.slice(-7)}`;
     return input;
   };
   const copyText = (e, text) => {
@@ -31,6 +32,10 @@ const Block = () => {
 
   if (isLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (!data?.data) {
+    return <NotFound text='해당 블록을 찾을 수 없습니다. 확인 부탁드립니다.' />;
   }
 
   return (

@@ -8,6 +8,7 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import { getTransactionById } from '../hooks/useAxios';
 import { BeddowsToLSK, timestampToDate } from '../utils/conversion-utils';
 import useToast from '../hooks/useToast';
+import NotFound from '../components/NotFound';
 
 const Transaction = () => {
   const { id } = useParams();
@@ -28,6 +29,10 @@ const Transaction = () => {
 
   if (isLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (!data?.data) {
+    return <NotFound text='해당 트랜잭션을 찾을 수 없습니다. 확인 부탁드립니다.' />;
   }
 
   return (

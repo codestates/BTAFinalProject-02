@@ -5,11 +5,7 @@ const ToastModal = () => {
   const { text } = useToast();
   const { setToast } = useToast();
 
-  if (text) {
-    return <Snackbar open anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={() => setToast('')} message={text} />;
-  } else {
-    return <></>;
-  }
+  return <Snackbar open={text ? true : false} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} onClose={() => setToast('')} message={text} />;
 };
 
 export default ToastModal;
