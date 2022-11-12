@@ -6,17 +6,21 @@ import {
   Button,
   Card,
   CardContent,
+  IconButton,
   Link,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import { BeddowsToLSK, timestampToDate } from "../../utils/conversion-utils";
 import LoadingSpinner from "../common/LoadingSpinner";
+import useToast from "../../hooks/useToast";
 
 const createCellData = (blockid, timestamp, generatorAddress, tempReward) => {
   const date = timestampToDate(new Date(timestamp));
@@ -26,6 +30,7 @@ const createCellData = (blockid, timestamp, generatorAddress, tempReward) => {
 
 const LastBlocks = () => {
   const [rows, setRows] = useState([]);
+  const { setToast } = useToast();
 
   const { data, isLoading } = useQuery(["block-list", Number(1)], () =>
     getBlockList(Number(1))
@@ -47,6 +52,12 @@ const LastBlocks = () => {
     setRows(blockList);
   }, [data]);
 
+  const copyText = (e, text) => {
+    e.stopPropagation();
+    setToast("클립보드에 복사되었습니다.");
+    navigator.clipboard.writeText(text);
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -57,7 +68,7 @@ const LastBlocks = () => {
           <Typography variant="h6" color="textSecondary">
             최근 생성된 블록
           </Typography>
-          <TableContainer sx={{ mt: 1, maxHeight: 440 }}>
+          <TableContainer sx={{ mt: 1, maxHeight: 550 }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableBody>
                 {rows &&
@@ -77,6 +88,16 @@ const LastBlocks = () => {
                           >
                             {row.blockid.slice(0, 8)}...{row.blockid.slice(-7)}
                           </Link>
+                          <Tooltip title="클립보드에 복사">
+                            <IconButton
+                              size="small"
+                              aria-label="copy text"
+                              onClick={(e) => copyText(e, row.blockid)}
+                              sx={{ ml: "4px" }}
+                            >
+                              <ContentCopyIcon style={{ fontSize: "14px" }} />
+                            </IconButton>
+                          </Tooltip>
                           <br /> {row.date}
                         </TableCell>
                         <TableCell align="left">
@@ -89,6 +110,16 @@ const LastBlocks = () => {
                             {row.generatorAddress.slice(0, 8)}...
                             {row.generatorAddress.slice(-7)}
                           </Link>
+                          <Tooltip title="클립보드에 복사">
+                            <IconButton
+                              size="small"
+                              aria-label="copy text"
+                              onClick={(e) => copyText(e, row.generatorAddress)}
+                              sx={{ ml: "4px" }}
+                            >
+                              <ContentCopyIcon style={{ fontSize: "14px" }} />
+                            </IconButton>
+                          </Tooltip>
                         </TableCell>
                         <TableCell align="right">{row.reward}</TableCell>
                       </>

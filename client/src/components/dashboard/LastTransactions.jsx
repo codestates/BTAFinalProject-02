@@ -5,18 +5,22 @@ import {
   Button,
   Card,
   CardContent,
+  IconButton,
   Link,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import SyncAltIcon from "@mui/icons-material/SyncAlt";
 import { BeddowsToLSK, timestampToDate } from "../../utils/conversion-utils";
 import LoadingSpinner from "../common/LoadingSpinner";
 import { getTransactionList } from "../../hooks/useAxios";
+import useToast from "../../hooks/useToast";
 
 const createCellData = (
   txId,
@@ -34,9 +38,9 @@ const createCellData = (
 
 const LastTransactions = () => {
   const [rows, setRows] = useState([]);
-  const { data, isLoading, refetch } = useQuery(
-    ["transaction-list", Number(1)],
-    () => getTransactionList(Number(1))
+  const { setToast } = useToast();
+  const { data, isLoading } = useQuery(["transaction-list", Number(1)], () =>
+    getTransactionList(Number(1))
   );
 
   useEffect(() => {
@@ -56,6 +60,12 @@ const LastTransactions = () => {
     setRows(transactionList);
   }, [data]);
 
+  const copyText = (e, text) => {
+    e.stopPropagation();
+    setToast("클립보드에 복사되었습니다.");
+    navigator.clipboard.writeText(text);
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -66,7 +76,7 @@ const LastTransactions = () => {
           <Typography variant="h6" color="textSecondary">
             최근 생성된 트랜잭션
           </Typography>
-          <TableContainer sx={{ mt: 1, maxHeight: 440 }}>
+          <TableContainer sx={{ mt: 1, maxHeight: 550 }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableBody>
                 {rows &&
@@ -87,6 +97,16 @@ const LastTransactions = () => {
                             {row.transactionid.slice(0, 8)}...
                             {row.transactionid.slice(-7)}
                           </Link>
+                          <Tooltip title="클립보드에 복사">
+                            <IconButton
+                              size="small"
+                              aria-label="copy text"
+                              onClick={(e) => copyText(e, row.transactionid)}
+                              sx={{ ml: "4px" }}
+                            >
+                              <ContentCopyIcon style={{ fontSize: "14px" }} />
+                            </IconButton>
+                          </Tooltip>
                           <br /> {row.date}
                         </TableCell>
                         <TableCell align="left">
@@ -98,6 +118,16 @@ const LastTransactions = () => {
                             {row.recipient.slice(0, 8)}...
                             {row.recipient.slice(-7)}
                           </Link>
+                          <Tooltip title="클립보드에 복사">
+                            <IconButton
+                              size="small"
+                              aria-label="copy text"
+                              onClick={(e) => copyText(e, row.recipient)}
+                              sx={{ ml: "4px" }}
+                            >
+                              <ContentCopyIcon style={{ fontSize: "14px" }} />
+                            </IconButton>
+                          </Tooltip>
                           <br />
                           to : &nbsp;
                           <Link
@@ -106,6 +136,16 @@ const LastTransactions = () => {
                           >
                             {row.sender.slice(0, 8)}...${row.sender.slice(-7)}
                           </Link>
+                          <Tooltip title="클립보드에 복사">
+                            <IconButton
+                              size="small"
+                              aria-label="copy text"
+                              onClick={(e) => copyText(e, row.sender)}
+                              sx={{ ml: "4px" }}
+                            >
+                              <ContentCopyIcon style={{ fontSize: "14px" }} />
+                            </IconButton>
+                          </Tooltip>
                         </TableCell>
                         <TableCell align="right">
                           <span style={{ fontWeight: "bold" }}>
