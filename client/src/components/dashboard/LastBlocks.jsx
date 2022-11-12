@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import EngineeringIcon from "@mui/icons-material/Engineering";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { BeddowsToLSK } from "../../utils/conversion-utils";
 import LoadingSpinner from "../common/LoadingSpinner";
 import useToast from "../../hooks/useToast";
@@ -40,7 +41,7 @@ const LastBlocks = () => {
   const [rows, setRows] = useState([]);
   const { setToast } = useToast();
 
-  const { data, isLoading } = useQuery(["block-list", Number(1)], () =>
+  const { data, isLoading, refetch } = useQuery(["block-list", Number(1)], () =>
     getBlockList(Number(1))
   );
 
@@ -66,6 +67,10 @@ const LastBlocks = () => {
     navigator.clipboard.writeText(text);
   };
 
+  const refreshFunction = () => {
+    refetch();
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -75,6 +80,10 @@ const LastBlocks = () => {
         <CardContent>
           <Typography variant="h6" color="textSecondary">
             최근 생성된 블록
+            <AutorenewIcon
+              sx={{ fontSize: "16px", marginLeft: "8px", cursor: "pointer" }}
+              onClick={() => refreshFunction()}
+            />
           </Typography>
           <TableContainer sx={{ mt: 1, maxHeight: 550 }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">

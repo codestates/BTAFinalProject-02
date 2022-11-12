@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import SyncAltIcon from "@mui/icons-material/SyncAlt";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { BeddowsToLSK } from "../../utils/conversion-utils";
 import LoadingSpinner from "../common/LoadingSpinner";
 import { getTransactionList } from "../../hooks/useAxios";
@@ -49,8 +50,9 @@ const createCellData = (
 const LastTransactions = () => {
   const [rows, setRows] = useState([]);
   const { setToast } = useToast();
-  const { data, isLoading } = useQuery(["transaction-list", Number(1)], () =>
-    getTransactionList(Number(1))
+  const { data, isLoading, refetch } = useQuery(
+    ["transaction-list", Number(1)],
+    () => getTransactionList(Number(1))
   );
 
   useEffect(() => {
@@ -67,6 +69,7 @@ const LastTransactions = () => {
         )
       );
     });
+
     setRows(transactionList);
   }, [data]);
 
@@ -74,6 +77,10 @@ const LastTransactions = () => {
     e.stopPropagation();
     setToast("클립보드에 복사되었습니다.");
     navigator.clipboard.writeText(text);
+  };
+
+  const refreshFunction = () => {
+    refetch();
   };
 
   if (isLoading) {
@@ -85,6 +92,10 @@ const LastTransactions = () => {
         <CardContent>
           <Typography variant="h6" color="textSecondary">
             최근 생성된 트랜잭션
+            <AutorenewIcon
+              sx={{ fontSize: "16px", marginLeft: "8px", cursor: "pointer" }}
+              onClick={() => refreshFunction()}
+            />
           </Typography>
           <TableContainer sx={{ mt: 1, maxHeight: 550 }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
