@@ -5,15 +5,26 @@ import {
   transactions,
 } from "@liskhq/lisk-client";
 import cryptojs from "crypto-js";
-
+import config from "../configs/config";
 const Mnemonic = passphrase.Mnemonic;
 
 const wallet = {
   init: function () {
     let self = this;
     this.network = "privatenet";
-    apiClient.createWSClient("ws://34.125.144.144:8000/ws").then((client) => {
+    apiClient.createWSClient(config.networks[this.network]).then((client) => {
       self.client = client;
+    });
+  },
+  changeNetwork: function (net) {
+    let self = this;
+    console.log(config);
+    return new Promise((resolve) => {
+      apiClient.createWSClient(config.networks[net]).then((client) => {
+        self.client = client;
+        self.network = net;
+        resolve();
+      });
     });
   },
   setPassword: function (password) {

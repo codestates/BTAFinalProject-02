@@ -7,10 +7,11 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import { changeNetwork } from "../../utils/storage";
 
 const Layout = ({ children }) => {
   const [anchorEl, setAnchorEl] = useState();
-
+  const [net, onChangeNet] = useState("privatenet");
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -20,7 +21,11 @@ const Layout = ({ children }) => {
   };
 
   const onClickLogout = () => {};
-
+  const changeNet = (value) => {
+    changeNetwork(value, (res) => {
+      if (res) onChangeNet(value);
+    });
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -33,15 +38,17 @@ const Layout = ({ children }) => {
         >
           <FormControl sx={{ m: 1, minWidth: 120, marginLeft: "20px" }}>
             <Select
-              value={30}
-              onChange={() => {}}
+              value={net}
+              onChange={(event) => {
+                changeNet(event.target.value);
+              }}
               displayEmpty
               sx={{ color: "white" }}
               inputProps={{ "aria-label": "Without label" }}
             >
-              <MenuItem value={10}>메인넷</MenuItem>
-              <MenuItem value={20}>테스트넷</MenuItem>
-              <MenuItem value={30}>localhost</MenuItem>
+              <MenuItem value={"mainnet"}>메인넷</MenuItem>
+              <MenuItem value={"testnet"}>테스트넷</MenuItem>
+              <MenuItem value={"privatenet"}>프라이빗넷</MenuItem>
             </Select>
           </FormControl>
           <IconButton

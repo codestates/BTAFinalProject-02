@@ -85,6 +85,17 @@ async function trySwitch(request, port) {
         });
       break;
 
+    case "changeNetwork":
+      wallet
+        .changeNetwork(request.net)
+        .then(() => {
+          port.postMessage({ type: "changeNetwork", result: true });
+        })
+        .catch(() => {
+          port.postMessage({ type: "changeNetwork", result: false });
+        });
+      break;
+
     default:
       break;
   }

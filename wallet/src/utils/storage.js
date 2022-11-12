@@ -15,6 +15,7 @@ port.onMessage.addListener(function (msg) {
   else if (msg.type === "loadPassphrase") callbacks.loadPassphrase(msg.result);
   else if (msg.type === "sendTransaction")
     callbacks.sendTransaction(msg.result);
+  else if (msg.type === "changeNetwork") callbacks.changeNetwork(msg.result);
 });
 
 let callbacks = {};
@@ -62,4 +63,9 @@ export function loadPassphrase(passphrase, callback) {
 export function sendTransaction(recipientAddress, amount, callback) {
   callbacks.sendTransaction = callback;
   port.postMessage({ type: "sendTransaction", recipientAddress, amount });
+}
+
+export function changeNetwork(net, callback) {
+  callbacks.changeNetwork = callback;
+  port.postMessage({ type: "changeNetwork", net });
 }
