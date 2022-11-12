@@ -3,7 +3,6 @@
 const port = chrome.runtime.connect();
 
 port.onMessage.addListener(function (msg) {
-  console.log(msg);
   if (msg.type === "setPassword") callbacks.setPassword(msg.result);
   else if (msg.type === "createPassphrase")
     callbacks.createPassphrase(msg.passphrase);

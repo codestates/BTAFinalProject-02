@@ -5,7 +5,7 @@ import Layout from "../components/layout/Layout";
 import Transaction from "./Transaction";
 import { getAccount } from "../utils/storage";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import RefreshIcon from '@mui/icons-material/Refresh';
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { transactions } from "@liskhq/lisk-client";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
@@ -16,7 +16,6 @@ const Home = () => {
 
   useEffect(() => {
     getAccount((res) => {
-      console.log(res);
       changeAccount(res);
     });
   }, []);
@@ -62,20 +61,21 @@ const Home = () => {
           </Box>
           <hr style={{ marginTop: "20px", backgroundColor: "#dada" }} />
         </div>
-          <div style={{marginTop:"10px", marginRight:"10px"}}>
-              <Box
-                  sx={{
-                      float: "right",
-                  }}
-              >
-                  <RefreshIcon onClick={()=>{
-                      getAccount((res) => {
-                          console.log(res);
-                          changeAccount(res);
-                      });
-                  }}/>
-              </Box>
-          </div>
+        <div style={{ marginTop: "10px", marginRight: "10px" }}>
+          <Box
+            sx={{
+              float: "right",
+            }}
+          >
+            <RefreshIcon
+              onClick={() => {
+                getAccount((res) => {
+                  changeAccount(res);
+                });
+              }}
+            />
+          </Box>
+        </div>
         <div style={{ marginTop: "45px" }}>
           <img width="50px" height="50px" src="lisk.png" alt="lisk gas" />
           <h2>LSK</h2>

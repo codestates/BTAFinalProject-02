@@ -10,7 +10,6 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 async function trySwitch(request, port) {
-  console.log(request);
   switch (request.type) {
     case "setPassword":
       wallet.setPassword(request.password);
@@ -83,7 +82,6 @@ async function trySwitch(request, port) {
           port.postMessage({ type: "sendLSK", result: true });
         })
         .catch((e) => {
-          console.log(e);
           port.postMessage({ type: "sendLSK", result: false });
         });
       break;
