@@ -103,9 +103,10 @@
         ![ezgif com-gif-maker 1](https://user-images.githubusercontent.com/46750216/201523298-041c7344-3e79-44af-bcfc-7354ccba3c0c.gif)
         
     
-    ### - 로그아웃
-    
-    ![ezgif com-gif-maker_(4)](https://user-images.githubusercontent.com/46750216/201523313-1071d6b9-5215-47fe-916b-7ba783261709.gif)
+ 
+   ### - 로그아웃
+   
+    ![ezgif com-gif-maker (9)](https://user-images.githubusercontent.com/89543695/201524631-0a5d8a3b-01df-4c8c-a8f3-97e66d2332ec.gif)
     
 
 ## 2. Explorer
