@@ -83,6 +83,7 @@ async function trySwitch(request, port) {
           port.postMessage({ type: "sendLSK", result: true });
         })
         .catch((e) => {
+          console.log(e);
           port.postMessage({ type: "sendLSK", result: false });
         });
       break;
@@ -105,6 +106,9 @@ async function trySwitch(request, port) {
       wallet.lockWallet();
       port.postMessage({ type: "lockWallet", result: true });
       break;
+    case "getCurrentNet":
+      port.postMessage({ type: "getCurrentNet", network: client.network });
+      return;
 
     default:
       break;

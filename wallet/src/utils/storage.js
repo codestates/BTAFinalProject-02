@@ -15,6 +15,7 @@ port.onMessage.addListener(function (msg) {
   else if (msg.type === "sendLSK") callbacks.sendLSK(msg.result);
   else if (msg.type === "changeNetwork") callbacks.changeNetwork(msg.network);
   else if (msg.type === "lockWallet") callbacks.lockWallet(msg.result);
+  else if (msg.type === "getCurrentNet") callbacks.getCurrentNet(msg.network);
 });
 
 let callbacks = {};
@@ -72,4 +73,9 @@ export function changeNetwork(net, callback) {
 export function lockWallet(callback) {
   callbacks.lockWallet = callback;
   port.postMessage({ type: "lockWallet" });
+}
+
+export function getCurrentNet(callback) {
+  callbacks.getCurrentNet = callback;
+  port.postMessage({ type: "getCurrentNet" });
 }

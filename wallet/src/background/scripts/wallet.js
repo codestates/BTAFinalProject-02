@@ -6,7 +6,6 @@ import {
   codec,
 } from "@liskhq/lisk-client";
 import cryptojs from "crypto-js";
-import config from "../configs/config";
 import client from "./client";
 const Mnemonic = passphrase.Mnemonic;
 
@@ -132,8 +131,7 @@ const wallet = {
         recipientAddress =
           cryptography.getAddressFromLisk32Address(recipientAddress);
       }
-      client.getAccount().then((data) => {
-        console.log(self.account);
+      client.getAccount(self.account.address).then((data) => {
         let transaction = transactions.signTransaction(
           {
             $id: "lisk/transfer-transaction",
@@ -238,7 +236,7 @@ const wallet = {
           }
         );
         client
-          .sendTransaction(transaction.signatures[0].toString("hex"))
+          .sendTransaction(encodedTransaction.toString("hex"))
           .then(resolve);
       });
     });

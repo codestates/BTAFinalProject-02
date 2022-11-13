@@ -13,18 +13,20 @@ const client = {
   network: "privatenet",
   endpoint: config.networks.privatenet,
   init: function () {
+    let self = this;
     this.request("get.network.status").then((answer) => {
-      this.networkIdentifier = Buffer.from(
+      self.networkIdentifier = Buffer.from(
         answer.result.data.networkIdentifier,
         "hex"
       );
     });
   },
   changeNetwork: function (net) {
+    const self = this;
     return new Promise((resolve) => {
-      this.network = net;
-      this.endpoint = config.networks[this.network];
-      this.request("get.network.status").then((answer) => {
+      self.network = net;
+      self.endpoint = config.networks[this.network];
+      self.request("get.network.status").then((answer) => {
         this.networkIdentifier = Buffer.from(
           answer.result.data.networkIdentifier,
           "hex"
