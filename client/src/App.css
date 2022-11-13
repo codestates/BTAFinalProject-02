@@ -1,0 +1,10 @@
+html,
+body,
+#root,
+#root > .MuiBox-root,
+#root > .MuiBox-root > .MuiBox-root {
+  height: 100%;
+}
+.filter-white {
+  filter: brightness(0) invert(1);
+}
