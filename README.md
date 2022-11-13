@@ -2,58 +2,26 @@
 
 # [2팀] Ultra Lisk
 
-모임시간: 오후 7시
-생성일: 2022년 10월 31일 오후 8:50
-선정코인: Lisk (LSK)
+- 모임시간: 오후 7시
+- 선정코인: Lisk (LSK)
 
 ## Ultra Lisk 팀 소개
 
 ---
 
 [개인 임무]
-|이름                        |공통                           |임무                             |
-|--------------------------|-----------------------------|-------------------------------|
-|박준혁                       |Blockchain Node 구성 및 운영      |팀장, 익스플로러 프론트엔드, 지갑 백엔드        |
-|황인철                       |Blockchain Node 구성 및 운영      |익스플로러 백엔드, Daemon, 지갑 총괄       |
-|전도후                       |Blockchain Node 구성 및 운영      |익스플로러 총괄, 지갑 백엔드               |
-|김원호                       |Blockchain Node 구성 및 운영      |익스플로러 백엔드, 문서 정리               |
+|이름                        |공통                           |임무                             |GitHub|
+|--------------------------|-----------------------------|-------------------------------|-------------------------------|
+|박준혁                       |Blockchain Node 구성 및 운영      |팀장, 익스플로러 프론트엔드, 지갑 백엔드        |<a href="https://github.com/berrypjh"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/></a>
+|황인철                       |Blockchain Node 구성 및 운영      |익스플로러 백엔드, Daemon, 지갑 총괄       |<a href="https://github.com/dlscjf151"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/></a>
+|전도후                       |Blockchain Node 구성 및 운영      |익스플로러 총괄, 지갑 백엔드               |<a href="https://github.com/adc0612"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/></a>
+|김원호                       |Blockchain Node 구성 및 운영      |익스플로러 백엔드, 문서 정리               |<a href="https://github.com/wonowon"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/></a>
 
 
-## GitHub
-
----
-
-[GitHub - codestates/BTAFinalProject-02](https://github.com/codestates/BTAFinalProject-02)
 
 ## 일정
 
-|이름                        |날짜                           |담당자                            |속성                           |업무     |
-|--------------------------|-----------------------------|-------------------------------|-----------------------------|-------|
-|block 조회 api              |2022년 11월 7일                 |황인철                            |Blockchain Explorer, 백엔드     |완료|
-|lisk-core로 노드 구성          |2022년 11월 7일 → 2022년 11월 8일  |황인철                            |Blockchain Explorer, 백엔드     |완료|
-|account 조회 api            |2022년 11월 7일                 |황인철                            |Blockchain Explorer, 백엔드     |완료|
-|transaction 조회 api        |2022년 11월 7일                 |황인철                            |Blockchain Explorer, 백엔드     |완료|
-|block 생성 subscribe 및 db 저장|2022년 11월 4일 → 2022년 11월 6일  |황인철                            |Blockchain Explorer, 백엔드     |완료|
-|지갑 관리 구조 선행 스터디 및 문서 정리   |2022년 11월 4일 → 2022년 11월 9일  |김원호                      |Blockchain Wallet, 백엔드       |완료|
-|Blocks pages 구성           |2022년 11월 4일 → 2022년 11월 6일  |전도후                      |Blockchain Explorer, 프론트엔드   |완료|
-|Transactions pages 구성     |2022년 11월 4일 → 2022년 11월 6일  |전도후                      |Blockchain Explorer, 프론트엔드   |완료|
-|Dashboard pages 구성        |2022년 11월 4일 → 2022년 11월 6일  |박준혁                           |Blockchain Explorer, 프론트엔드   |완료|
-|니모닉 코드(Mnemonic Code) 생성  |2022년 11월 8일 → 2022년 11월 10일 |황인철, 박준혁                      |Blockchain Wallet, 백엔드, 프론트엔드|완료|
-|프로젝트 종료 및 발표              |2022년 11월 14일                |황인철, 김원호, 박준혁, 전도후|문서 정리                        |완료|
-|Lisk blockchain Node 구성   |2022년 11월 2일 → 2022년 11월 3일  |박준혁, 황인철, 김원호, 전도후|Blockchain Node, 백엔드         |완료|
-|Lisk blockchain Node 연결   |2022년 11월 1일 → 2022년 11월 2일  |박준혁, 황인철, 김원호, 전도후|Blockchain Node, 백엔드         |완료|
-|코인 선정 및 스터디               |2022년 10월 31일                |박준혁, 황인철, 김원호, 전도후|기획                           |완료|
-|block 조회 api 데이터 연결       |2022년 11월 7일 → 2022년 11월 9일  |전도후                      |Blockchain Explorer, 프론트엔드   |완료|
-|transaction 조회 api 데이터 연결 |2022년 11월 7일 → 2022년 11월 9일  |전도후                      |Blockchain Explorer, 프론트엔드   |완료|
-|신규 지갑 주소(Address) 발급      |2022년 11월 9일 → 2022년 11월 11일 |황인철, 박준혁                      |Blockchain Wallet, 백엔드, 프론트엔드|완료|
-|송금                        |2022년 11월 11일 → 2022년 11월 12일|황인철                            |Blockchain Wallet, 백엔드, 프론트엔드|완료|
-|잔액 조회                     |2022년 11월 11일 → 2022년 11월 12일|황인철                            |Blockchain Wallet, 백엔드, 프론트엔드|완료|
-|로그인 및 지갑 가져오기 구현          |2022년 11월 9일 → 2022년 11월 11일 |황인철, 박준혁                      |Blockchain Wallet, 백엔드, 프론트엔드|완료|
-|account 조회 api 데이터 연결     |2022년 11월 10일 → 2022년 11월 12일|전도후                      |Blockchain Explorer, 프론트엔드   |완료|
-|wallet page 구성            |2022년 11월 7일 → 2022년 11월 8일  |박준혁                           |Blockchain Wallet, 프론트엔드     |완료|
-|dashboard api 데이터 연결      |2022년 11월 11일 → 2022년 11월 12일|박준혁                           |Blockchain Explorer, 프론트엔드   |완료|
-|최종 검토 및 버그 수정             |2022년 11월 13일                |황인철, 김원호, 박준혁, 전도후|버그                           |완료|
-|프로젝트 문서 작성 및 발표 준비        |2022년 11월 13일                |황인철, 김원호, 박준혁, 전도후|문서 정리                        |완료|
+![image](https://user-images.githubusercontent.com/46750216/201523927-2425912b-ff6b-43b8-98bc-35b4c3de33db.png)
 
 ## 선정 코인 소개
 
