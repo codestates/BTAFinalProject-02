@@ -13,7 +13,7 @@ port.onMessage.addListener(function (msg) {
   else if (msg.type === "getAccount") callbacks.getAccount(msg.account);
   else if (msg.type === "loadPassphrase") callbacks.loadPassphrase(msg.result);
   else if (msg.type === "sendLSK") callbacks.sendLSK(msg.result);
-  else if (msg.type === "changeNetwork") callbacks.changeNetwork(msg.result);
+  else if (msg.type === "changeNetwork") callbacks.changeNetwork(msg.network);
   else if (msg.type === "lockWallet") callbacks.lockWallet(msg.result);
 });
 

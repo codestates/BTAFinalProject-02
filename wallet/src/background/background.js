@@ -72,6 +72,7 @@ async function trySwitch(request, port) {
     case "getAccount":
       wallet.getAccount().then((account) => {
         port.postMessage({ type: "getAccount", account: account });
+        port.postMessage({ type: "changeNetwork", network: account.network });
       });
       break;
 
@@ -90,13 +91,13 @@ async function trySwitch(request, port) {
       client
         .changeNetwork(request.net)
         .then(() => {
-          port.postMessage({ type: "changeNetwork", result: true });
+          port.postMessage({ type: "changeNetwork", network: request.net });
           wallet.getAccount().then((account) => {
             port.postMessage({ type: "getAccount", account: account });
           });
         })
         .catch(() => {
-          port.postMessage({ type: "changeNetwork", result: false });
+          port.postMessage({ type: "changeNetwork", newtwork: request.net });
         });
       break;
 

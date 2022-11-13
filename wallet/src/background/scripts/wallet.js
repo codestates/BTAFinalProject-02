@@ -113,14 +113,12 @@ const wallet = {
         .getAccount(this.account.address)
         .then((data) => {
           let accountData = self.account;
-          delete accountData.passphrase;
           accountData.balance = data.summary.balance;
           accountData.network = client.network;
           resolve(accountData);
         })
         .catch(() => {
           let accountData = self.account;
-          delete accountData.passphrase;
           accountData.balance = "0";
           accountData.network = client.network;
           resolve(accountData);
@@ -128,12 +126,14 @@ const wallet = {
     });
   },
   sendLSK: function (recipientAddress, amount) {
+    let self = this;
     return new Promise((resolve) => {
       if (recipientAddress.startsWith("lsk")) {
         recipientAddress =
           cryptography.getAddressFromLisk32Address(recipientAddress);
       }
       client.getAccount().then((data) => {
+        console.log(self.account);
         let transaction = transactions.signTransaction(
           {
             $id: "lisk/transfer-transaction",
@@ -172,7 +172,7 @@ const wallet = {
             },
           },
           client.networkIdentifier,
-          this.account.passphrase
+          self.account.passphrase
         );
         const encodedAsset = codec.codec.encode(
           {
@@ -237,7 +237,9 @@ const wallet = {
             asset: encodedAsset,
           }
         );
-        client.sendTransaction(transaction.signatures[0].toString("hex"));
+        client
+          .sendTransaction(transaction.signatures[0].toString("hex"))
+          .then(resolve);
       });
     });
   },
