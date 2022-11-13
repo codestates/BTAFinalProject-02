@@ -15,7 +15,6 @@ const Transaction = () => {
   const { setToast } = useToast();
 
   const { data, isLoading } = useQuery(['transaction', id], () => getTransactionById(id));
-  console.log(data);
 
   const truncate = (input) => {
     if (input.length > 15) return `${input.slice(0, 8)}...${input.slice(-7)}`;

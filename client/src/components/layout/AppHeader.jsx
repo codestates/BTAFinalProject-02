@@ -49,7 +49,7 @@ const AppHeader = () => {
             </FormControl>
           </Box>
           <Box>
-            <FormControl sx={{ m: 1, width: '250px' }} variant='outlined' size='small'>
+            <FormControl sx={{ m: 1, width: '300px' }} variant='outlined' size='small'>
               <OutlinedInput
                 id='search-text-box'
                 placeholder='검색'

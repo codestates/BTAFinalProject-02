@@ -1,8 +1,8 @@
 html,
 body,
 #root,
-#root > div,
-#root > div > div {
+#root > .MuiBox-root,
+#root > .MuiBox-root > .MuiBox-root {
   height: 100%;
 }
 .filter-white {

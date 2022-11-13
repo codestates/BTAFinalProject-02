@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react';
 
-const TOAST_TIME = 100000;
+const TOAST_TIME = 5000;
 const initialState = {
   text: '',
 };

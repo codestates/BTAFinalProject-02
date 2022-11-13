@@ -59,7 +59,11 @@ const Block = () => {
         <Box sx={{ display: 'flex', mt: 2 }}>
           <Box sx={{ flexBasis: '50%' }}>
             <Typography variant='subtitle2'>Height</Typography>
-            <p>{data?.data.height}</p>
+            <p>
+              <Link href={`/block/${data?.data.height}`} underline='hover'>
+                {data?.data.height}
+              </Link>
+            </p>
           </Box>
           <Box sx={{ flexBasis: '50%' }}>
             <Typography variant='subtitle2'>Max Height Previously Forged</Typography>
@@ -71,7 +75,9 @@ const Block = () => {
           <Box sx={{ flexBasis: '50%' }}>
             <Typography variant='subtitle2'>Previous Block ID</Typography>
             <p style={{ display: 'flex', alignItems: 'center' }}>
-              {truncate(data?.data.previousBlockID)}
+              <Link href={`/block/${data?.data.previousBlockID}`} underline='hover'>
+                {truncate(data?.data.previousBlockID)}
+              </Link>
               <Tooltip title='클립보드에 복사'>
                 <IconButton size='small' aria-label='copy text' onClick={(e) => copyText(e, data?.data.previousBlockID)} sx={{ ml: '4px' }}>
                   <ContentCopyIcon style={{ fontSize: '14px' }} />

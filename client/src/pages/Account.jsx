@@ -40,7 +40,6 @@ const Account = () => {
 
   const accountQuery = useQuery(['account', address], () => getAccountInfo(address));
   const transactionQuery = useQuery(['accountTransaction', address, Number(page)], () => getAccountTransactions(address, Number(page)));
-  console.log(transactionQuery.data);
   useEffect(() => {
     const transactionList = [];
     transactionQuery.data?.data.transactions.forEach((transaction) => {
@@ -68,9 +67,8 @@ const Account = () => {
   if (accountQuery.isLoading || transactionQuery.isLoading) {
     return <LoadingSpinner />;
   }
-
-  if (!accountQuery.data?.data) {
-    return <NotFound text='해당 블록을 찾을 수 없습니다. 확인 부탁드립니다.' />;
+  if (!accountQuery || !accountQuery.data?.data) {
+    return <NotFound text='해당 계정을 찾을 수 없습니다. 확인 부탁드립니다.' />;
   }
 
   return (

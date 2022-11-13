@@ -7,6 +7,7 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import DataTable from '../components/DataTable';
 import { getBlockList } from '../hooks/useAxios';
 import { BeddowsToLSK, timestampToDate } from '../utils/conversion-utils';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 
 const columns = [
   { id: 'height', label: 'Height', minWidth: 170 },
@@ -47,13 +48,17 @@ const Blocks = () => {
   const handlePaginationChange = (e, value) => {
     setSearchParams({ page: value });
   };
+  const refreshData = () => refetch();
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
+
   return (
     <Box>
       <Typography variant='h4' sx={{ fontWeight: '500', letterSpacing: '1px' }}>
         Blocks
+        <AutorenewIcon sx={{ fontSize: '16px', marginLeft: '8px', cursor: 'pointer' }} onClick={refreshData} />
       </Typography>
       <Box sx={{ mt: '12px' }}>
         <DataTable title='Blocks Table' rows={rows} columns={columns} />

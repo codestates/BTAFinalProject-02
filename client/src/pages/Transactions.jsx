@@ -7,6 +7,7 @@ import DataTable from '../components/DataTable';
 import { getTransactionList } from '../hooks/useAxios';
 import { BeddowsToLSK, timestampToDate } from '../utils/conversion-utils';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 
 const columns = [
   { id: 'transactionid', label: 'Transaction ID', minWidth: 180 },
@@ -18,8 +19,9 @@ const columns = [
   { id: 'fee', label: 'Fee', minWidth: 100 },
 ];
 
-const createCellData = (transactionid, date, sender, recipient, blockid, tempAmount, tempFee) => {
+const createCellData = (transactionid, timestamp, sender, recipient, blockid, tempAmount, tempFee) => {
   const amount = `${BeddowsToLSK(tempAmount)} LSK`;
+  const date = timestampToDate(new Date(timestamp));
   const fee = `${BeddowsToLSK(tempFee)} LSK`;
   return { transactionid, date, sender, recipient, blockid, amount, fee };
 };
@@ -33,7 +35,7 @@ const Transactions = () => {
   useEffect(() => {
     const transactionList = [];
     data?.data.transactions.forEach((transaction) => {
-      transactionList.push(createCellData(transaction.id, '', transaction.senderAddress, transaction.recipientAddress, transaction.blockID, transaction.amount, transaction.fee));
+      transactionList.push(createCellData(transaction.id, transaction.timestamp, transaction.senderAddress, transaction.recipientAddress, transaction.blockID, transaction.amount, transaction.fee));
     });
     setPageCount(data?.data.count ? Math.ceil(data?.data.count / 20) : 1);
     setRows(transactionList);
@@ -48,7 +50,7 @@ const Transactions = () => {
   const handlePaginationChange = (e, value) => {
     setSearchParams({ page: value });
   };
-
+  const refreshData = () => refetch();
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -57,6 +59,7 @@ const Transactions = () => {
     <Box>
       <Typography variant='h4' sx={{ fontWeight: '500', letterSpacing: '1px' }}>
         Transactions
+        <AutorenewIcon sx={{ fontSize: '16px', marginLeft: '8px', cursor: 'pointer' }} onClick={refreshData} />
       </Typography>
       <Box sx={{ mt: '12px' }}>
         <DataTable title='Transactions Table' rows={rows} columns={columns} />
