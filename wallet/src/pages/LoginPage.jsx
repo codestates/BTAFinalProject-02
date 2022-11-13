@@ -7,6 +7,8 @@ import {
   OutlinedInput,
   InputAdornment,
   IconButton,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Home from "./Home";
@@ -31,25 +33,30 @@ const LoginPage = () => {
   return (
     <>
       <div style={{ textAlign: "center", paddingTop: "230px" }}>
-        <OutlinedInput
-          label="비밀번호입력"
-          onChange={onChangePassword}
-          id="outlined-required"
-          type={showPassword ? "text" : "password"}
-          defaultValue=""
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                edge="end"
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-        />
+        <FormControl variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">
+            비밀번호 입력
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            label="비밀번호입력"
+            onChange={onChangePassword}
+            type={showPassword ? "text" : "password"}
+            defaultValue=""
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
         <div style={{ paddingTop: "10px" }}>
           <Button variant="contained" onClick={onClickSubmit}>
             확인
