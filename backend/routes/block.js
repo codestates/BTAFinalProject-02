@@ -1,5 +1,5 @@
-const router = require('express').Router()
-const Block = require('../models/block')
+const router = require("express").Router();
+const Block = require("../models/block");
 
 /**
  * @swagger
@@ -19,14 +19,18 @@ const Block = require('../models/block')
  *       "200":
  *         description: block 리스트(페이지당 20개)
  */
-router.get('/:page?', (req, res) => {
-    const page = req.params["page"] || 1;
-    Block.getList(page).then(list => {
-        Block.getCount().then(count => {
-            res.send({blocks: list, count})
-        })
+router.get("/:page?", (req, res) => {
+  const page = req.params["page"] || 1;
+  Block.getList(page)
+    .then((list) => {
+      Block.getCount().then((count) => {
+        res.send({ blocks: list, count });
+      });
     })
-})
+    .catch((error) => {
+      res.status(500).send({ error: error.message });
+    });
+});
 
 /**
  * @swagger
@@ -46,12 +50,16 @@ router.get('/:page?', (req, res) => {
  *       "200":
  *         description: block 정보
  */
-router.get('/id/:id', (req, res) => {
-    const transactionID = req.params["id"]
-    Block.findBlockByID(transactionID).then(block => {
-        res.send(block)
+router.get("/id/:id", (req, res) => {
+  const transactionID = req.params["id"];
+  Block.findBlockByID(transactionID)
+    .then((block) => {
+      res.send(block);
     })
-})
+    .catch((error) => {
+      res.status(500).send({ error: error.message });
+    });
+});
 
 /**
  * @swagger
@@ -71,11 +79,15 @@ router.get('/id/:id', (req, res) => {
  *       "200":
  *         description: block 정보
  */
-router.get('/height/:height', (req, res) => {
-    const blockHeight = req.params["height"]
-    Block.findBlockByHeight(blockHeight).then(block => {
-        res.send(block)
+router.get("/height/:height", (req, res) => {
+  const blockHeight = req.params["height"];
+  Block.findBlockByHeight(blockHeight)
+    .then((block) => {
+      res.send(block);
     })
-})
+    .catch((error) => {
+      res.status(500).send({ error: error.message });
+    });
+});
 
 module.exports = router;

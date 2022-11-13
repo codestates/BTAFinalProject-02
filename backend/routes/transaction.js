@@ -1,5 +1,5 @@
-const router = require('express').Router()
-const Transaction = require('../models/transaction')
+const router = require("express").Router();
+const Transaction = require("../models/transaction");
 
 /**
  * @swagger
@@ -19,14 +19,18 @@ const Transaction = require('../models/transaction')
  *       "200":
  *         description: transaction 리스트(페이지당 20개)
  */
-router.get('/:page?', (req, res) => {
-    const page = req.params["page"] || 1;
-    Transaction.getList(page).then(list => {
-        Transaction.getCount().then(count => {
-            res.send({transactions: list, count})
-        })
+router.get("/:page?", (req, res) => {
+  const page = req.params["page"] || 1;
+  Transaction.getList(page)
+    .then((list) => {
+      Transaction.getCount().then((count) => {
+        res.send({ transactions: list, count });
+      });
     })
-})
+    .catch((error) => {
+      res.status(500).send({ error: error.message });
+    });
+});
 
 /**
  * @swagger
@@ -46,11 +50,15 @@ router.get('/:page?', (req, res) => {
  *       "200":
  *         description: transaction 정보
  */
-router.get('/id/:id', (req, res) => {
-    const transactionID = req.params["id"]
-    Transaction.findTransaction(transactionID).then(transaction => {
-        res.send(transaction)
+router.get("/id/:id", (req, res) => {
+  const transactionID = req.params["id"];
+  Transaction.findTransaction(transactionID)
+    .then((transaction) => {
+      res.send(transaction);
     })
-})
+    .catch((error) => {
+      res.status(500).send({ error: error.message });
+    });
+});
 
 module.exports = router;
