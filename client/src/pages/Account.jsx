@@ -67,7 +67,7 @@ const Account = () => {
   if (accountQuery.isLoading || transactionQuery.isLoading) {
     return <LoadingSpinner />;
   }
-  if (!accountQuery || !accountQuery.data?.data) {
+  if (accountQuery.isError || !accountQuery.data?.data) {
     return <NotFound text='해당 계정을 찾을 수 없습니다. 확인 부탁드립니다.' />;
   }
 
