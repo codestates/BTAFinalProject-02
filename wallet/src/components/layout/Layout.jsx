@@ -8,7 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import { changeNetwork, lockWallet } from "../../utils/storage";
+import { changeNetwork, getCurrentNet, lockWallet } from "../../utils/storage";
 import { goTo } from "react-chrome-extension-router";
 import LoginPage from "../../pages/LoginPage";
 
@@ -34,6 +34,12 @@ const Layout = ({ children }) => {
       onChangeNet(res);
     });
   };
+  useEffect(() => {
+    getCurrentNet((res) => {
+      console.log(res);
+      onChangeNet(res);
+    });
+  });
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
